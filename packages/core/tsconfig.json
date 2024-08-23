@@ -1,0 +1,20 @@
+{
+    "extends": "@tsconfig/node20/tsconfig.json",
+    "compilerOptions": {
+      "module": "NodeNext",
+  
+      "baseUrl": ".",
+      "paths": {
+        "@services/*": ["../../packages/core/src/services/*"],
+        "@control-plane/*": ["../../packages/core/src/control-plane/*"],
+        "@orchestrator/*": ["../../packages/core/src/orchestrator/*"], 
+        "@agent-plane/*": ["../../packages/core/src/agent-plane/*"],
+        "@utils/*": ["../../packages/utils/src/*"],
+      }, 
+     //"esModuleInterop": true
+    }, 
+    "include": [
+      "**/*.test.ts", 
+      "**/*.ts"
+,   ]
+}

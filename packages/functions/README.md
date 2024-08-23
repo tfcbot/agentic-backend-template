@@ -1,0 +1,1 @@
+This directory includes our Lambda funcitons. It imports from the core/ package by using it as a local dependency.
