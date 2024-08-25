@@ -2,7 +2,7 @@ import { SQSEvent } from 'aws-lambda';
 import { updateSettingsUseCase } from '@control-plane/user/usecases/update-settings.usecase';
 import { UserSettingsSchema } from '@control-plane/user/metadata/user.schema';
 
-export const updateSettingsSubscriber = async (event: SQSEvent) => {
+export const updateSettingsSubscriberAdapter = async (event: SQSEvent) => {
   try {
     for (const record of event.Records) {
       const body = JSON.parse(record.body);

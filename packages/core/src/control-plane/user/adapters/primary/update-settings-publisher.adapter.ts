@@ -4,7 +4,7 @@ import { UserSettingsSchema } from '@control-plane/user/metadata/user.schema';
 import { authMiddleware } from '@utils/jwt';
 
 
-export const updateSettingsPublisher = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+export const updateSettingsPublisherAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   const decodedToken = authMiddleware(event);
   
   try {

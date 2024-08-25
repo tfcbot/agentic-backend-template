@@ -3,7 +3,7 @@ import { generateContentUseCase  } from '@orchestrator/usecases/publish-generate
 import { GenerateContentInputSchema } from '@orchestrator/metadata/content-generator-service.schema';
 import { authMiddleware } from '@utils/jwt';
 
-export const aiGeneratorHandler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+export const aiGeneratorAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   try {
     const decodedToken = authMiddleware(event);
 

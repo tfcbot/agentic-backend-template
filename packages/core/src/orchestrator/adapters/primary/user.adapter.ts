@@ -4,7 +4,7 @@ import { getUserContentUseCase } from '@orchestrator/usecases/retrieve-user-cont
 
 import { authMiddleware } from '@utils/jwt';
 
-export const getUserInfoHandler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+export const getUserInfoAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   
     try {
     const decodedToken = authMiddleware(event);
