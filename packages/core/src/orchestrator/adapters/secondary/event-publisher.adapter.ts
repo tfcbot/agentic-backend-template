@@ -11,11 +11,14 @@ import { Resource } from "sst";
 function getQueueUrlForJobType(queue: Queue): string {
     switch (queue) {
       case Queue.content:
-        return Resource.jobQueue.url;
+        //@ts-ignore
+        return Resource.JobQueue.url;
       case Queue.content:
+        //@ts-ignore
         return Resource.AgentQueue.url;
       case Queue.user:
-        return Resource.userQueue.url;
+        //@ts-ignore
+        return Resource.UserQueue.url;
       default:
         throw new Error(`Unknown queue type: ${queue}`);
     }

@@ -14,7 +14,7 @@ export const billingWebhookAdapter = async (event: any) => {
     const signature = event.headers["stripe-signature"];	
     let stripeEvent;	
     try {	
-        stripeEvent = stripe.webhooks.constructEvent(event.body, signature, process.env.STRIPE_WEBHOOK_SECRET);	
+        stripeEvent = await stripe.webhooks.constructEvent(event.body, signature, process.env.STRIPE_WEBHOOK_SECRET);	
     } catch (err) {	
         console.error("Stripe webhook signature verification failed:", err);	
         return { statusCode: 400, body: "Invalid signature" };	

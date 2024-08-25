@@ -9,7 +9,7 @@ import { authMiddleware } from '@utils/jwt';
 import { aiGeneratorHandler } from '@orchestrator/adapters/primary/content-generator-service.adapter';
 import { contentGeneratorJobAdapter } from '@services/content-generator/adapters/primary/content-generator.adapter';
 import { TargetPlatform, Tone } from '@services/content-generator/metadata/content.schema';
-import { BedrockAgentRuntimeClient, InvokeAgentCommand } from "@aws-sdk/client-bedrock-agent-runtime";
+import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandOutput } from "@aws-sdk/client-bedrock-agent-runtime";
 
 jest.mock('@utils/jwt', () => ({
   authMiddleware: jest.fn().mockReturnValue({ sub: 'mockUserId' }),
@@ -22,11 +22,9 @@ const bedrockAgentMock = mockClient(BedrockAgentRuntimeClient);
 
 jest.mock('sst', () => ({
   Resource: {
-    Videos: { tableName: 'MockVideosTable' },
-    Transcripts: { tableName: 'MockTranscriptsTable' },
-    VideoTranscriptBucket: { name: 'MockBucketName' },
-    ContentQueue: { url: 'MockContentQueueUrl' },
-    VideoQueue: { url: 'MockVideoQueueUrl' }
+    JobQueue: { url: 'MockVideoQueueUrl' },
+    AgentQueue: { url: 'MockAgentQueueUrl' },
+    UserQueue: { url: 'MockUserQueueUrl' }
   }
 }));
 
@@ -107,16 +105,40 @@ describe('Content Generation Integration', () => {
     };
 
     // Mock Bedrock Agent response
-    bedrockAgentMock.on(InvokeAgentCommand).resolves({
-      completion: 'Generated content for LinkedIn'
-    });
+    const mockInvokeAgentResponse: Partial<InvokeAgentCommandOutput> = {
+      completion: {
+        [Symbol.asyncIterator]: async function* () {
+          yield {
+            chunk: {
+              bytes: new TextEncoder().encode("Mocked response text"),
+              attribution: {
+                citations: []
+              }
+            }
+          };
+        }
+      },
+      contentType: "application/json",
+      sessionId: "mock-session-id",
+      $metadata: {}
+    };
+    
+    bedrockAgentMock.on(InvokeAgentCommand).resolves(mockInvokeAgentResponse);
 
-    // Content generator service result
-    const contentGeneratorResult = await contentGeneratorJobAdapter(mockSQSEvent);
-    const parsedContentGeneratorResult = JSON.parse(JSON.stringify(contentGeneratorResult));
+    // Publish the job to the content generator
+    const body = await contentGeneratorJobAdapter(mockSQSEvent);
+    const parsedContentGeneratorResult = JSON.parse(JSON.stringify(body));
 
     expect(parsedContentGeneratorResult.statusCode).toBe(200);
-    expect(JSON.parse(parsedContentGeneratorResult.body)).toEqual(['Generated content for LinkedIn']);
+    const parsedBody = JSON.parse(parsedContentGeneratorResult.body);
+    expect(parsedBody).toBeInstanceOf(Array);
+    expect(parsedBody).toHaveLength(1);
+    expect(parsedBody[0]).toEqual({
+      $metadata: {},
+      completion: {},
+      contentType: "application/json",
+      sessionId: "mock-session-id"
+    });
     expect(bedrockAgentMock.calls()).toHaveLength(1);
 
     // Verify Bedrock Agent call

@@ -1,12 +1,12 @@
 import { CheckoutInfo, User } from "@control-plane/billing/metadata/billing.schema";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand, PutCommand, TransactWriteCommand, UpdateCommand, UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 
 // @ts-ignore
 import { Resource } from "sst";
 
-
-const dynamoClient = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+const client = new DynamoDBClient({});
+const dynamoClient = DynamoDBDocumentClient.from(client);
 const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -39,15 +39,15 @@ export async function createSession(checkoutInfo: CheckoutInfo): Promise<{}> {
 
 export async function updateBillingStatus(user: User) {	
     try {
-        const params: UpdateCommandInput = {
+        const params = {
+            // @ts-ignore
             TableName: Resource.Users.tableName,
             Key: { userId: user.userId },
             UpdateExpression: 'SET paymentStatus = :paymentStatus, onboardingStatus = :onboardingStatus',
             ExpressionAttributeValues: {
                 ':paymentStatus': user.paymentStatus,
                 ':onboardingStatus': user.onboardingStatus
-            },
-            ReturnValues: 'UPDATED_NEW'
+            }
         };
 
         const command = new UpdateCommand(params);
@@ -60,4 +60,3 @@ export async function updateBillingStatus(user: User) {
         throw new Error('Failed to update user status');
     }
 }
-

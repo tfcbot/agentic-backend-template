@@ -1,5 +1,5 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-import { generateContentUseCase  } from 'src/orchestrator/usecases/publish-generate-content-job.usecase';
+import { generateContentUseCase  } from '@orchestrator/usecases/publish-generate-content-job.usecase';
 import { GenerateContentInputSchema } from '@orchestrator/metadata/content-generator-service.schema';
 import { authMiddleware } from '@utils/jwt';
 
@@ -24,6 +24,7 @@ export const aiGeneratorHandler = async (event: APIGatewayProxyEventV2): Promise
   } catch (error) {
     console.error('Error in AI action:', error);
     if (error instanceof Error) {
+      
       if (error.message === 'Missing CLERK_PEM_PUBLIC_KEY' || error.message === 'No token provided' || error.message === 'Invalid token') {
         return {
           statusCode: 401,

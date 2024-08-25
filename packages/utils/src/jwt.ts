@@ -20,6 +20,7 @@ export function verifyJwt(token: string, publicKey: string): JwtPayload {
 }
 
 export function authMiddleware(event: APIGatewayProxyEventV2): JwtPayload {
+  // TODO: Store the public key in secret manager and fetch it from there
   const publicKey = process.env.CLERK_PEM_PUBLIC_KEY;
   const token = event.headers.authorization?.split(' ')[1];
   if (!publicKey) {
