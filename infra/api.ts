@@ -18,7 +18,7 @@ export const api = new sst.aws.ApiGatewayV2('BackendApi', {
 }); 
 
 api.route("POST /checkout", {
-  link: [table, stripeSecretKey],
+  link: [usersTable, stripeSecretKey],
   handler: "./packages/functions/src/api.handleCheckout",
   environment: {
     STRIPE_SECRET_KEY: stripeSecretKey.value,
@@ -30,7 +30,7 @@ api.route("POST /checkout", {
 })
 
 api.route("POST /stripe-webhook", {
-  link: [table, stripeSecretKey], 
+  link: [usersTable, stripeSecretKey], 
   handler: "./packages/functions/src/api.handleBillingEvents", 
   environment: {
     STRIPE_WEBHOOK_SECRET: stripeWebhookSecret.value,
@@ -39,7 +39,7 @@ api.route("POST /stripe-webhook", {
 })
 
 api.route("POST /clerk-signup", {
-  link: [table, clerkWebhookSecret], 
+  link: [usersTable, clerkWebhookSecret], 
   handler: "./packages/functions/src/api.handleClerkSignUp", 
   environment: {
     CLERK_WEBHOOK_SECRET: clerkWebhookSecret.value, 
@@ -48,7 +48,7 @@ api.route("POST /clerk-signup", {
 })
 
 api.route('GET /users', {
-  link: [table],
+  link: [usersTable],
   handler: "./packages/functions/src/api.handleGetUser", 
   environment: {
   //  ALLOWED_ORIGIN: allowedOrigin, 

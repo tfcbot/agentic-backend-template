@@ -5,7 +5,7 @@ import { usersTable } from "./database"
 
 export const DLQ = new sst.aws.Queue("JobDLQ")
 
-export const jobQueue = new sst.aws.Queue("jobQueue")
+export const jobQueue = new sst.aws.Queue("JobQueue")
 
 const subscriberRole = new aws.iam.Role("JobQueueSubscriberRole", {
     assumeRolePolicy: JSON.stringify({
