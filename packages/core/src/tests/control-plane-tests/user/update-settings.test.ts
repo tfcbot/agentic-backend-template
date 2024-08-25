@@ -107,8 +107,8 @@ describe('@user module tests', () => {
       });
     });
 
-    describe('updateMessageSettingsUseCase', () => {
-      it('should update user preferences successfully', async () => {
+    describe('updateSettingsUseCase', () => {
+      it('should update publish event successfully', async () => {
         const settings: UserSettings = {
           userId: 'user123',
           brandStyleTone: 'Professional',
@@ -122,22 +122,9 @@ describe('@user module tests', () => {
 
         await updateSettingsUseCase(settings);
 
-        expect(dynamoDocumentMock.calls()).toHaveLength(1);
+        expect(sqsMock.calls()).toHaveLength(1);
       });
 
-      it('should throw an error if update fails', async () => {
-        const settings: UserSettings = {
-          userId: 'user123',
-          brandStyleTone: 'Professional',
-          coreMessaging: 'Innovative solutions',
-          visionStatement: 'Transform industries',
-          positioningStatement: 'Leading provider',
-        };
-
-        dynamoDocumentMock.on(UpdateCommand).rejects(new Error('DynamoDB error'));
-
-        await expect(updateSettingsUseCase(settings)).rejects.toThrow('Failed to update message settings');
-      });
     });
   });
 
