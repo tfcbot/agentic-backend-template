@@ -1,6 +1,6 @@
 import { invokeContentAgent } from '@services/content-generator/adapters/secondary/content-agent.adapter';
-import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandOutput } from "@aws-sdk/client-bedrock-agent-runtime";
-import { ContentGenerationJob, Status, TargetPlatform } from "@services/content-generator/metadata/content.schema";
+import { BedrockAgentRuntimeClient, InvokeAgentCommand } from "@aws-sdk/client-bedrock-agent-runtime";
+import { ContentGenerationJob, Status } from "@services/content-generator/metadata/content.schema";
 import { mockClient } from "aws-sdk-client-mock";
 import { randomUUID } from "crypto";
 
@@ -24,8 +24,6 @@ describe('Content Management Adapter', () => {
     const mockJob: ContentGenerationJob = {
       id: randomUUID(),
       userId: 'user123',
-      targetPlatform: TargetPlatform.LinkedIn,
-      videoId: '12312312',
       prompt: 'Create a post',
       status: Status.Pending,
       createdAt: new Date().toISOString(),
@@ -40,8 +38,6 @@ describe('Content Management Adapter', () => {
     const mockJob: ContentGenerationJob = {
       id: randomUUID(),
       userId: 'user123',
-      targetPlatform: TargetPlatform.LinkedIn,
-      videoId: '12312312',
       prompt: 'Create a post',
       status: Status.Pending,
       createdAt: new Date().toISOString(),
@@ -56,8 +52,6 @@ describe('Content Management Adapter', () => {
     const mockJob: ContentGenerationJob = {
       id: randomUUID(),
       userId: 'user123',
-      targetPlatform: TargetPlatform.LinkedIn,
-      videoId: '12312312',
       prompt: 'Create a post',
       status: Status.Pending,
       createdAt: new Date().toISOString(),
@@ -66,6 +60,11 @@ describe('Content Management Adapter', () => {
 
     bedrockAgentMock.on(InvokeAgentCommand).rejects(new Error('Bedrock Agent error'));
 
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
     await expect(invokeContentAgent(mockJob)).rejects.toThrow('Bedrock Agent error');
+
+
+    consoleErrorSpy.mockRestore();
   });
 });

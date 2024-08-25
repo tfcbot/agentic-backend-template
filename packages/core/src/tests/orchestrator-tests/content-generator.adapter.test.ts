@@ -99,43 +99,5 @@ describe('contentGeneratorJobAdapter', () => {
     expect(generateContentUsecase).toHaveBeenCalledTimes(2);
   });
 
-  it('should cache transcripts for repeated video IDs', async () => {
-    const mockTranscript = 'Mock transcript';
-    const mockGeneratedContent = 'Generated content';
-    const mockVideoId = randomUUID();
 
-    (generateContentUsecase as jest.Mock).mockResolvedValue(mockGeneratedContent);
-
-    const mockEvent: SQSEvent = {
-      Records: [
-        {
-          body: JSON.stringify({
-            jobId: randomUUID(),
-            userId: 'user123',
-            videoId: mockVideoId,
-            targetPlatform: 'LINKEDIN',
-            prompt: 'Create a post',
-            status: 'PENDING',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }),
-        },
-        {
-          body: JSON.stringify({
-            jobId: randomUUID(),
-            userId: 'user456',
-            videoId: mockVideoId,
-            targetPlatform: 'TWITTER',
-            prompt: 'Write a tweet',
-            status: 'PENDING',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }),
-        },
-      ] as any,
-    };
-
-    await contentGeneratorJobAdapter(mockEvent);
-    expect(generateContentUsecase).toHaveBeenCalledTimes(2);
-  });
 });

@@ -8,18 +8,20 @@ const sqsClient = new SQSClient({});
 import { Resource } from "sst";
 
 function getQueueUrlForJobType(queue: Queue): string {
-    switch (queue) {
-      case Queue.content:
-        return Resource.jobQueue.url;
-      case Queue.agent:
-        return Resource.AgentQueue.url;
-      case Queue.user:
-        return Resource.userQueue.url;
-      default:
-        throw new Error(`Unknown queue type: ${queue}`);
-    }
+  switch (queue) {
+    case Queue.content:
+      //@ts-ignore
+      return Resource.JobQueue.url;
+    case Queue.content:
+      //@ts-ignore
+      return Resource.AgentQueue.url;
+    case Queue.user:
+      //@ts-ignore
+      return Resource.UserQueue.url;
+    default:
+      throw new Error(`Unknown queue type: ${queue}`);
+  }
 }
-
 export const publishEvent = async(job: Job | UserSettingsJob ): Promise<void> => {
   const queueUrl = getQueueUrlForJobType(job.queue);
   try {

@@ -3,15 +3,14 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { createUserUseCase } from '@control-plane/user/usecases/create-user.usecase';
 import { getUserDataUseCase } from '@control-plane/user/usecases/get-user-data.usecase';
-import { updateMessageSettingsUseCase } from '@control-plane/user/usecases/update-message-settings.usecase';
-import { createUser, getUserData, updateUserPreferences } from '@control-plane/user/adapters/secondary/user-management';
-import { publishEvent } from '@control-plane/user/adapters/secondary/event-publisher';
+import { updateSettingsUseCase } from '@control-plane/user/usecases/update-settings.usecase'
+import { createUser, getUserData, updateUserSettings } from '@control-plane/user/adapters/secondary/user-management.adapter';
+import { publishEvent } from '@control-plane/user/adapters/secondary/event-publisher.adapter';
 import { getUserDataAdapter } from '@control-plane/user/adapters/primary/get-user-data.adapter';
-import { updateMessageSettingsPublisher } from '@control-plane/user/adapters/primary/update-preferences-publisher.adapter';
-import { updateMessageSettingsSubscriber } from '@control-plane/user/adapters/primary/update-preferences-subscriber.adapter';
-import { NewUser, User, PaymentStatus, OnboardingStatus } from '@control-plane/user/metadata/schemas/user.schema';
-import { UserPreferences, UserPreferencesJob, UserPreferencesSchema } from '@control-plane/user/metadata/schemas/user-preferences.schema';
-import { Queue, Status } from '@control-plane/user/metadata/schemas/job.schema';
+import { updateSettingsPublisher} from '@control-plane/user/adapters/primary/update-settings-publisher.adapter';
+import { updateSettingsSubscriber } from '@control-plane/user/adapters/primary/update-settings-subscriber.adapter';
+import { NewUser, User, PaymentStatus, OnboardingStatus, UserSettings, UserSettingsJob } from '@control-plane/user/metadata/user.schema';
+import { Queue, Status } from '@control-plane/user/metadata/job.schema';
 import { APIGatewayProxyEventV2, SQSEvent } from 'aws-lambda';
 import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { authMiddleware, verifyJwt } from '@utils/jwt';
@@ -110,7 +109,7 @@ describe('@user module tests', () => {
 
     describe('updateMessageSettingsUseCase', () => {
       it('should update user preferences successfully', async () => {
-        const preferences: UserPreferences = {
+        const settings: UserSettings = {
           userId: 'user123',
           brandStyleTone: 'Professional',
           coreMessaging: 'Innovative solutions',
@@ -121,13 +120,13 @@ describe('@user module tests', () => {
         dynamoDocumentMock.on(UpdateCommand).resolves({});
         sqsMock.on(SendMessageCommand).resolves({});
 
-        await updateMessageSettingsUseCase(preferences);
+        await updateSettingsUseCase(settings);
 
         expect(dynamoDocumentMock.calls()).toHaveLength(1);
       });
 
       it('should throw an error if update fails', async () => {
-        const preferences: UserPreferences = {
+        const settings: UserSettings = {
           userId: 'user123',
           brandStyleTone: 'Professional',
           coreMessaging: 'Innovative solutions',
@@ -137,7 +136,7 @@ describe('@user module tests', () => {
 
         dynamoDocumentMock.on(UpdateCommand).rejects(new Error('DynamoDB error'));
 
-        await expect(updateMessageSettingsUseCase(preferences)).rejects.toThrow('Failed to update message settings');
+        await expect(updateSettingsUseCase(settings)).rejects.toThrow('Failed to update message settings');
       });
     });
   });
@@ -192,7 +191,7 @@ describe('@user module tests', () => {
           dynamoDocumentMock.on(UpdateCommand).resolves({});
           sqsMock.on(SendMessageCommand).resolves({});
 
-          const result = await updateMessageSettingsPublisher(mockEvent as APIGatewayProxyEventV2);
+          const result = await updateSettingsPublisher(mockEvent as APIGatewayProxyEventV2);
           const parsedResult = JSON.parse(JSON.stringify(result));
           expect(parsedResult.statusCode).toBe(200);
         });
@@ -231,7 +230,7 @@ describe('@user module tests', () => {
 
           dynamoDocumentMock.on(UpdateCommand).resolves({});
 
-          await updateMessageSettingsSubscriber(mockEvent);
+          await updateSettingsSubscriber(mockEvent);
 
           expect(sqsMock.calls()).toHaveLength(1);
         });
@@ -272,7 +271,7 @@ describe('@user module tests', () => {
         });
 
         it('should update user preferences successfully', async () => {
-          const preferences: UserPreferences = {
+          const settings: UserSettings = {
             userId: 'user123',
             brandStyleTone: 'Professional',
             coreMessaging: 'Innovative solutions',
@@ -282,7 +281,7 @@ describe('@user module tests', () => {
 
           dynamoDocumentMock.on(UpdateCommand).resolves({});
 
-          await updateUserPreferences(preferences);
+          await updateUserSettings(settings);
 
           expect(dynamoDocumentMock.calls()).toHaveLength(1);
         });
@@ -292,7 +291,7 @@ describe('@user module tests', () => {
 
       describe('event-publisher', () => {
         it('should publish an event successfully', async () => {
-          const job: UserPreferencesJob = {
+            const job: UserSettingsJob = {
             jobId: 'job123',
             userId: 'user123',
             brandStyleTone: 'Professional',

@@ -2,7 +2,9 @@ import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { updateSettingsUseCase } from '@control-plane/user/usecases/update-settings.usecase';
 import { UserSettingsSchema } from '@control-plane/user/metadata/user.schema';
 import { authMiddleware } from '@utils/jwt';
-export const updateMessageSettingsPublisher = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+
+
+export const updateSettingsPublisher = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   const decodedToken = authMiddleware(event);
   
   try {

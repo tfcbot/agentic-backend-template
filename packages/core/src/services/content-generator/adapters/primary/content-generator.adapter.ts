@@ -15,8 +15,6 @@ export const contentGeneratorJobAdapter = async (event: SQSEvent) => {
         const contentGenerationJob: ContentGenerationJob = {
             id: body.jobId,
             userId: body.userId,
-            targetPlatform: body.targetPlatform,
-            videoId: body.videoId, 
             prompt: body.prompt,
             status: body.status,
             createdAt: body.createdAt,

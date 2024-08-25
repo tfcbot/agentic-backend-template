@@ -8,7 +8,7 @@ export enum Status {
 }
 
 export enum Queue {
-    video = 'video',
+    agent = 'agent',
     content = 'content',
     user = 'user'
 }

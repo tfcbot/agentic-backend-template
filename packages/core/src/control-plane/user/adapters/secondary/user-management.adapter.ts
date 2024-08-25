@@ -13,6 +13,7 @@ const dynamoClient = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 export const createUser = async (user: NewUser) => {
     try {
       const command = new PutCommand({
+        // @ts-ignore
         TableName: Resource.Users.tableName,
         Item: user,
       });
@@ -29,6 +30,7 @@ export const createUser = async (user: NewUser) => {
 export const getUserData = async (userId: string): Promise<User | null> => {
   try {
     const command = new GetCommand({
+      // @ts-ignore
       TableName: Resource.Users.tableName,
       Key: { userId: userId },
     });
@@ -56,6 +58,7 @@ export const updateUserSettings = async (settings: UserSettings): Promise<void> 
     const { userId, ...updateFields } = settings;
     
     const command = new UpdateCommand({
+      // @ts-ignore
       TableName: Resource.Users.tableName,
       Key: { userId },
       UpdateExpression: `SET ${Object.keys(updateFields).map(key => `${key} = :${key}`).join(', ')}`,

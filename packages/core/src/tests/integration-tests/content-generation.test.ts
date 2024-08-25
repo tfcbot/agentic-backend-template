@@ -8,7 +8,7 @@ import { APIGatewayProxyResultV2, APIGatewayProxyEventV2, SQSEvent } from 'aws-l
 import { authMiddleware } from '@utils/jwt';
 import { aiGeneratorHandler } from '@orchestrator/adapters/primary/content-generator-service.adapter';
 import { contentGeneratorJobAdapter } from '@services/content-generator/adapters/primary/content-generator.adapter';
-import { TargetPlatform, Tone } from '@services/content-generator/metadata/content.schema';
+import { } from '@services/content-generator/metadata/content.schema';
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandOutput } from "@aws-sdk/client-bedrock-agent-runtime";
 
 jest.mock('@utils/jwt', () => ({
@@ -48,12 +48,7 @@ describe('Content Generation Integration', () => {
     // Mock the orchestrator input
     const mockEvent: Partial<APIGatewayProxyEventV2> = {
       body: JSON.stringify({
-        videoIds: [mockVideoId],
-        prompts: {
-          [TargetPlatform.LinkedIn]: 'Create a professional post',
-          [TargetPlatform.Twitter]: 'Write a catchy tweet'
-        },
-        targetPlatforms: [TargetPlatform.LinkedIn, TargetPlatform.Twitter]
+        prompts: ['Create a post'],
       }),
       headers: {
         authorization: 'Bearer mockToken',
@@ -82,8 +77,6 @@ describe('Content Generation Integration', () => {
           body: JSON.stringify({
             jobId: mockJobId,
             userId: mockUserId,
-            videoId: mockVideoId,
-            targetPlatform: TargetPlatform.LinkedIn,
             prompt: 'Create a professional post',
             status: 'Pending',
             createdAt: expect.any(String),

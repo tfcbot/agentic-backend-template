@@ -1,5 +1,5 @@
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandInput, InvokeAgentCommandOutput, InvokeAgentResponse } from "@aws-sdk/client-bedrock-agent-runtime";
-import { ContentGenerationJob, Tone } from "src/services/content-generator/metadata/content.schema";
+import { ContentGenerationJob } from "src/services/content-generator/metadata/content.schema";
 
 const bedrockAgentClient = new BedrockAgentRuntimeClient({ region: process.env.AWS_REGION });
 
@@ -22,9 +22,7 @@ export const invokeContentAgent = async (contentGenerationJob: ContentGeneration
     console.log('Agent Alias', agentAliasId)
     console.log("Agent variables set")
 
-    const agentInputText = `Follow ${contentGenerationJob.prompt} and
-     create a post for target platform: ${contentGenerationJob.targetPlatform}. Based on 
-     ${contentGenerationJob.videoId} for ${contentGenerationJob.userId}`
+    const agentInputText = `Follow ${contentGenerationJob.prompt} and generate content`
 
 
     const agentInput: InvokeAgentCommandInput = {
