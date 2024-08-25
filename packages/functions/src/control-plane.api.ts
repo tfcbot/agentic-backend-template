@@ -9,7 +9,7 @@ import { updateSettingsSubscriberAdapter } from "@control-plane/user/adapters/pr
 
 export const billingWebhook = createHandler(billingWebhookAdapter);
 export const checkout = createHandler(checkoutAdapter);
-export const createUser = createHandler(createUserAdapter);
+export const handleUserSignup = createHandler(createUserAdapter);
 export const getUser = createHandler(getUserDataAdapter);
 export const updateSettingsPublisher = createHandler(updateSettingsPublisherAdapter);
 export const updateSettingsSubscriber = createSQSHandler(updateSettingsSubscriberAdapter);

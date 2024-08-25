@@ -9,7 +9,6 @@ export enum Status {
 }
 
 export enum Queue {
-    agent = 'agent',
     content = 'content',
     user = 'user'
 }

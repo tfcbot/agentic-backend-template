@@ -11,10 +11,7 @@ function getQueueUrlForJobType(queue: Queue): string {
   switch (queue) {
     case Queue.content:
       //@ts-ignore
-      return Resource.JobQueue.url;
-    case Queue.content:
-      //@ts-ignore
-      return Resource.AgentQueue.url;
+      return Resource.ContentQueue.url;
     case Queue.user:
       //@ts-ignore
       return Resource.UserQueue.url;

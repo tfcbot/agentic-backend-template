@@ -6,7 +6,7 @@ import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { randomUUID } from 'crypto';
 import { APIGatewayProxyResultV2, APIGatewayProxyEventV2, SQSEvent } from 'aws-lambda';
 import { authMiddleware } from '@utils/jwt';
-import { aiGeneratorHandler } from '@orchestrator/adapters/primary/content-generator-service.adapter';
+import { aiGeneratorAdapter } from '@orchestrator/adapters/primary/content-generator-service.adapter';
 import { contentGeneratorJobAdapter } from '@services/content-generator/adapters/primary/content-generator.adapter';
 import { } from '@services/content-generator/metadata/content.schema';
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandOutput } from "@aws-sdk/client-bedrock-agent-runtime";
@@ -22,8 +22,7 @@ const bedrockAgentMock = mockClient(BedrockAgentRuntimeClient);
 
 jest.mock('sst', () => ({
   Resource: {
-    JobQueue: { url: 'MockVideoQueueUrl' },
-    AgentQueue: { url: 'MockAgentQueueUrl' },
+    ContentQueue: { url: 'MockContentQueueUrl' },
     UserQueue: { url: 'MockUserQueueUrl' }
   }
 }));
@@ -61,7 +60,7 @@ describe('Content Generation Integration', () => {
     });
 
     // Orchestrator result
-    const orchestratorResult: APIGatewayProxyResultV2 = await aiGeneratorHandler(mockEvent as APIGatewayProxyEventV2);
+    const orchestratorResult: APIGatewayProxyResultV2 = await aiGeneratorAdapter(mockEvent as APIGatewayProxyEventV2);
     const parsedOrchestratorResult = JSON.parse(JSON.stringify(orchestratorResult));
     
     expect(parsedOrchestratorResult.statusCode).toBe(200);

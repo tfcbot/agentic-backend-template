@@ -5,10 +5,13 @@ export default $config({
       return {
         name: "agentic-backend-template",
         removal: input?.stage === "production" ? "retain" : "remove",
+        
         home: "aws",
         providers: { aws: {
+          profile: input?.stage,
           region: "us-east-1",
         }, "aws-native": {
+          profile: input?.stage,
           region: "us-east-1",
         }},
       };

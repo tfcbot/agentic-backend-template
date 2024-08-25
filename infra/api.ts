@@ -19,7 +19,7 @@ export const api = new sst.aws.ApiGatewayV2('BackendApi', {
 
 api.route("POST /checkout", {
   link: [usersTable, stripeSecretKey],
-  handler: "./packages/functions/src/api.handleCheckout",
+  handler: "./packages/functions/src/control-plane.api.checkout",
   environment: {
     STRIPE_SECRET_KEY: stripeSecretKey.value,
     REDIRECT_SUCCESS_URL: $app.stage == "main" ? "https://app.example.com": `https://${$app.stage}-dash.example.com`, 
@@ -31,7 +31,7 @@ api.route("POST /checkout", {
 
 api.route("POST /stripe-webhook", {
   link: [usersTable, stripeSecretKey], 
-  handler: "./packages/functions/src/api.handleBillingEvents", 
+  handler: "./packages/functions/src/control-plane.api.billingWebhook", 
   environment: {
     STRIPE_WEBHOOK_SECRET: stripeWebhookSecret.value,
     CLERK_PEM_PUBLIC_KEY: clerkPemKey.value 
@@ -40,25 +40,36 @@ api.route("POST /stripe-webhook", {
 
 api.route("POST /clerk-signup", {
   link: [usersTable, clerkWebhookSecret], 
-  handler: "./packages/functions/src/api.handleClerkSignUp", 
+  handler: "./packages/functions/src/control-plane.api.handleUserSignup", 
   environment: {
     CLERK_WEBHOOK_SECRET: clerkWebhookSecret.value, 
     CLERK_PEM_PUBLIC_KEY: clerkPemKey.value
   }
 })
 
-api.route('GET /users', {
-  link: [usersTable],
-  handler: "./packages/functions/src/api.handleGetUser", 
+api.route("POST /settings", {
+  link: [], 
+  handler: "./packages/functions/src/control-plane.api.updateSettingsPublisher",
   environment: {
-  //  ALLOWED_ORIGIN: allowedOrigin, 
     CLERK_PEM_PUBLIC_KEY: clerkPemKey.value
   }
 })
 
-api.route("POST /agent-action", {
+
+
+api.route("GET /content", {
+  link: [], 
+  handler: "./packages/functions/src/orchestrator.api.handleGetUserContentRequest",
+  environment: {
+    CLERK_PEM_PUBLIC_KEY: clerkPemKey.value
+  }
+})
+
+
+
+api.route("POST /content", {
   link: [],
-  handler: "./packages/functions/src/api.handleAgentAction",
+  handler: "./packages/functions/src/orchestrator.api.handleConentGenerationRequest",
   environment: {
     CLERK_PEM_PUBLIC_KEY: clerkPemKey.value,
     AGENT_ID: agentResource.agentId,

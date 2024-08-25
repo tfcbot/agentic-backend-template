@@ -1,7 +1,7 @@
 import { bucket } from "./bucket";
 import { usersTable } from "./database";
 
-const lambdaRole = new aws.iam.Role("LambdaRole", {
+const lambdaRole = new aws.iam.Role("ExecutorLambdaRole", {
     assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -93,7 +93,7 @@ new aws.iam.RolePolicy("LambdaPolicy", {
 });
 
 export const executorLambda = new sst.aws.Function("executor", {
-    handler: "./packages/functions/src/agents.executors.agentFunction", 
+    handler: "./packages/functions/src/agents.executors.agentExecutor", 
     role: lambdaRole.arn,
     link: [bucket, usersTable],
     timeout: '300 seconds'
@@ -102,7 +102,7 @@ export const executorLambda = new sst.aws.Function("executor", {
 // Add resource-based policy to allow Bedrock to invoke the Lambda function
 new aws.lambda.Permission("AllowBedrockInvoke", {
     action: "lambda:InvokeFunction",
-    function: lambdaRole.name,
+    function: executorLambda.name,
     principal: "bedrock.amazonaws.com",
     statementId: "AllowBedrockInvoke",
 });

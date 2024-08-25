@@ -47,25 +47,12 @@ new aws.iam.RolePolicy("JobQueueSubscriberPolicy", {
     }),
 });
 
-jobQueue.subscribe(
-    { 
-        handler: "./packages/functions/src/services.api.jobHandler",
-        link: [ usersTable]
-    },
-    {filters : [
-        {
-            body : {
-                jobId : [{exists : true}]
-            }
-        }
-    ]}
-)
 
 
-export const AgentQueue = new sst.aws.Queue("AgentQueue")
+export const ContentQueue = new sst.aws.Queue("ContentQueue")
     
-AgentQueue.subscribe({
-        handler: "./packages/functions/src/services.api.agentHandler", 
+ContentQueue.subscribe({
+        handler: "./packages/functions/src/services.api.contentGenerationHandler", 
         link: [
             bucket, 
             usersTable, 
