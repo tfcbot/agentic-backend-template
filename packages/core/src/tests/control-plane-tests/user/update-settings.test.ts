@@ -7,8 +7,8 @@ import { updateSettingsUseCase } from '@control-plane/user/usecases/update-setti
 import { createUser, getUserData, updateUserSettings } from '@control-plane/user/adapters/secondary/user-management.adapter';
 import { publishEvent } from '@control-plane/user/adapters/secondary/event-publisher.adapter';
 import { getUserDataAdapter } from '@control-plane/user/adapters/primary/get-user-data.adapter';
-import { updateSettingsPublisher} from '@control-plane/user/adapters/primary/update-settings-publisher.adapter';
-import { updateSettingsSubscriber } from '@control-plane/user/adapters/primary/update-settings-subscriber.adapter';
+import { updateSettingsPublisherAdapter} from '@control-plane/user/adapters/primary/update-settings-publisher.adapter';
+import { updateSettingsSubscriberAdapter } from '@control-plane/user/adapters/primary/update-settings-subscriber.adapter';
 import { NewUser, User, PaymentStatus, OnboardingStatus, UserSettings, UserSettingsJob } from '@control-plane/user/metadata/user.schema';
 import { Queue, Status } from '@control-plane/user/metadata/job.schema';
 import { APIGatewayProxyEventV2, SQSEvent } from 'aws-lambda';
@@ -178,7 +178,7 @@ describe('@user module tests', () => {
           dynamoDocumentMock.on(UpdateCommand).resolves({});
           sqsMock.on(SendMessageCommand).resolves({});
 
-          const result = await updateSettingsPublisher(mockEvent as APIGatewayProxyEventV2);
+          const result = await updateSettingsPublisherAdapter(mockEvent as APIGatewayProxyEventV2);
           const parsedResult = JSON.parse(JSON.stringify(result));
           expect(parsedResult.statusCode).toBe(200);
         });
@@ -217,7 +217,7 @@ describe('@user module tests', () => {
 
           dynamoDocumentMock.on(UpdateCommand).resolves({});
 
-          await updateSettingsSubscriber(mockEvent);
+          await updateSettingsSubscriberAdapter(mockEvent);
 
           expect(sqsMock.calls()).toHaveLength(1);
         });

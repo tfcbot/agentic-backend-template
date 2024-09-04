@@ -2,9 +2,9 @@ import { ResponseState } from "@aws-sdk/client-bedrock-agent-runtime";
 import { 
     AgentInputEvent, 
     AgentResponse,
-    GenerateRequestSchema,
-} from "@agent-plane/agent/metadata/agent"
-import { agentGenerateUseCase } from "@agent-plane/agent/usecases/generate.usecase"
+    ContentRequestSchema
+} from "src/agent-plane/content-agent/metadata/agent"
+import { agentGenerateUseCase } from "src/agent-plane/content-agent/usecases/generate.usecase"
 
 export const agentHandler = async (event: AgentInputEvent): Promise<AgentResponse> => {
     const functionName = event.function;
@@ -15,7 +15,7 @@ export const agentHandler = async (event: AgentInputEvent): Promise<AgentRespons
     switch (functionName) {
         case "generate":
             console.log('Agent Invoking Generate')
-            input = GenerateRequestSchema.parse(parameters) 
+            input = ContentRequestSchema.parse(parameters) 
             console.log("Input:", input)
             usecaseResponse = await agentGenerateUseCase(input);
             break;

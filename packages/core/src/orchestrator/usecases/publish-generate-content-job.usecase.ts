@@ -6,23 +6,18 @@ import { randomUUID } from 'crypto';
 
 export async function generateContentUseCase(jobInput: GenerateContentInput): Promise<void> {
   try {
-    const jobs: ContentGenerationJob[] = jobInput.videoIds.flatMap(videoId => 
-      jobInput.targetPlatforms.map(platform => ({
-        jobId: randomUUID(),
-        userId: jobInput.userId,
-        videoId: videoId,
-        prompt: jobInput.prompts[platform],
-        targetPlatform: platform,
-        status: Status.Pending,
-        queue: Queue.content,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }))
-    );
+    const job: ContentGenerationJob = {
+      jobId: randomUUID(),
+      userId: jobInput.userId,
+      prompt: jobInput.prompt,
+      status: Status.Pending,
+      queue: Queue.content,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
 
-    for (const job of jobs) {
-      await publishEvent(job);
-    }
+    await publishEvent(job);
+
   } catch (error) {
     console.error('Error in generateContentUseCase:', error);
     throw new Error('Failed to publish content generation events');

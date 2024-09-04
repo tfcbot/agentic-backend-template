@@ -64,25 +64,41 @@ export const AgentResponseSchema = z.object({
 });
 
 // Generate request schema
-export const GenerateRequestSchema = z.object({
-    messageVersion: z.literal('1.0'),
-    inputText: z.string(),
-    sessionId: z.string(),
-    actionGroup: z.string(),
-    function: z.string(),
-    parameters: z.array(z.object({
-        name: z.string(),
-        type: z.string(),
-        value: z.string()
-    })),
-    sessionAttributes: z.record(z.string()),
-    promptSessionAttributes: z.record(z.string())
+export const ContentRequestSchema = z.array(
+  z.object({
+    name: z.string(),
+    type: z.string(),
+    value: z.string(),
+  })
+).transform((arr) => {
+  const result: { [key: string]: string } = {};
+  arr.forEach((item) => {
+    result[item.name] = item.value;
+  });
+  return z.object({
+    prompt: z.string(),
+    userId: z.string()
+  }).parse(result);
 });
+
+
+export const ContentGenerationCommandSchema = z.object({
+    prompt: z.string(),
+    userId: z.string(), 
+})
+
+export const ContentSchema = z.object({
+    userId: z.string(),
+    contentId: z.string().uuid(),
+    text: z.string(),
+});
+
 
 // Export types
 export type AgentInputEvent = z.infer<typeof AgentInputEventSchema>;
 export type AgentResponse = z.infer<typeof AgentResponseSchema>;
 export type Input = z.infer<typeof InputSchema>;
-export type GenerateRequest = z.infer<typeof GenerateRequestSchema>;
-
+export type ContentRequest = z.infer<typeof ContentRequestSchema>;
+export type ContentGenerationCommand = z.infer<typeof ContentGenerationCommandSchema>;
+export type Content = z.infer<typeof ContentSchema>;
 // Add more schemas and types as needed

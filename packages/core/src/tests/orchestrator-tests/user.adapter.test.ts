@@ -1,4 +1,4 @@
-import { getUserInfoHandler } from '@orchestrator/adapters/primary/user.adapter';
+import {  getUserContentAdapter} from '@orchestrator/adapters/primary/user.adapter';
 import { getUserContentUseCase } from '@orchestrator/usecases/retrieve-user-content.usecase';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { authMiddleware } from '@utils/jwt';
@@ -31,7 +31,7 @@ describe('User Adapter Tests', () => {
     };
     const consoleErrorSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
-    const result: {} = await getUserInfoHandler(mockEvent as APIGatewayProxyEventV2);
+    const result: {} = await getUserContentAdapter(mockEvent as APIGatewayProxyEventV2);
     const parsedResult = JSON.parse(JSON.stringify(result));
     expect(parsedResult.statusCode).toBe(200);
     expect(authMiddleware).toHaveBeenCalledWith(mockEvent);
@@ -48,7 +48,7 @@ describe('User Adapter Tests', () => {
       version: '2.0',
     };
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const result = await getUserInfoHandler(mockEvent as APIGatewayProxyEventV2);
+    const result = await getUserContentAdapter(mockEvent as APIGatewayProxyEventV2);
     const parsedResult = JSON.parse(JSON.stringify(result));
 
     expect(parsedResult.statusCode).toBe(401);
@@ -69,7 +69,7 @@ describe('User Adapter Tests', () => {
       version: '2.0',
     };
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const result = await getUserInfoHandler(mockEvent as APIGatewayProxyEventV2);
+    const result = await getUserContentAdapter(mockEvent as APIGatewayProxyEventV2);
     const parsedResult = JSON.parse(JSON.stringify(result));
 
     expect(parsedResult.statusCode).toBe(500);

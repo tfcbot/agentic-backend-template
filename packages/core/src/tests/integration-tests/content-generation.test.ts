@@ -47,7 +47,7 @@ describe('Content Generation Integration', () => {
     // Mock the orchestrator input
     const mockEvent: Partial<APIGatewayProxyEventV2> = {
       body: JSON.stringify({
-        prompts: ['Create a post'],
+        prompt: 'Create a post',
       }),
       headers: {
         authorization: 'Bearer mockToken',
@@ -65,7 +65,7 @@ describe('Content Generation Integration', () => {
     
     expect(parsedOrchestratorResult.statusCode).toBe(200);
     expect(authMiddleware).toHaveBeenCalledWith(mockEvent);
-    expect(sqsMock.calls()).toHaveLength(2); // One call for each target platform
+    expect(sqsMock.calls()).toHaveLength(1); // One call for each target platform
 
     // Mock SQS event for content generator
     const mockSQSEvent: SQSEvent = {

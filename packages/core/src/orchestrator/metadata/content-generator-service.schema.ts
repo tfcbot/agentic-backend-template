@@ -32,8 +32,7 @@ export const GenerateContentInputSchema = z.object({
 export const ContentGenerationJobSchema = z.object({
   jobId: z.string().uuid(),
   userId: z.string(),
-  videoId: z.string(),
-  targetPlatform: z.nativeEnum(TargetPlatform),
+  prompt: z.string(), 
   status: z.nativeEnum(Status),
   queue: z.nativeEnum(Queue),
   createdAt: z.string(),
