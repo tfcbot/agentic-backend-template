@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 jest.mock('jsonwebtoken');
 
 describe('JWT Utility', () => {
-  const mockPublicKey = '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1lsa9nJGeOazGYrclAX/\n9vCC9e4YE/uIHUMfTqiyrqtGJSOaw2LjHldbunH0vrpdQEkdL8GdwD28Ujs5HQjU\nGhEhPuAkLF5m0c7XeopXB9UBkfltORQNTQeeN0gDMM488Grp9yiwIk459aEl3JMg\nGzvwNaMCJxNnDBda9nFGoNsfYm7Fq6ax6iSQD++sijON5kaI4ap/6N9r3C49uH2r\nYOV2qeK5OA9rA9Bgp5A1ChjntETWh7Ap+T3Z2X3v1JZaXE3kkVclgvrvREOb92U+\nYnWzf+/q6vpabQVZ9HfK0eXl0kgPm8uIpu7GC0A23ZoUwb9CYrIM0HybGlSvAA5V\nowIDAQAB\n-----END PUBLIC KEY-----';
+  const mockPublicKey = '-----BEGIN PUBLIC KEY-----\nMIBCgKCAQEdsfsdfs0283480fsdYrclAX/\n9vCC9e4YE/uIHUMfTqiyrqtGJSOaw2LjHldbunH0vrpdQEkdL8GdwD28Ujs5HQjU\nGhEhPuAkLF5m0c7XeopXB9UBkfltORQNTQeeN0gDMM488Grp9yiwIk459aEl3JMg\nGzvwNaMCJxNnDBda9nFGoNsfYm7Fq6ax6iSQD++sijON5kaI4ap/6N9r3C49uH2r\nYOV2qeK5OA9rA9Bgp5A1ChjntETWh7Ap+T3Z2X3v1JZaXE3kkVclgvrvREOb92U+\nYnWzf+/q6vpabQVZ9HfK0eXl0kgPm8uIpu7GC0A23ZoUwb9CYrIM0HybGlSvAA5V\nowIDAQAX\n-----END PUBLIC KEY-----';
 
   beforeEach(() => {
     jest.resetAllMocks();
