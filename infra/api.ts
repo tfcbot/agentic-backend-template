@@ -1,5 +1,5 @@
 import { usersTable } from "./database";
-import { agentAlias, agentResource } from "./agents";
+import { agentAlias, agentResource } from "./agents/content-agent/content-agent-build";
 
 const stripeSecretKey = new sst.Secret('StripeSecretKey')
 const stripeWebhookSecret = new sst.Secret('StripeWebhookSecret')

@@ -1,6 +1,3 @@
-import { bucket } from "./bucket";
-import { usersTable } from "./database";
-
 const lambdaRole = new aws.iam.Role("ExecutorLambdaRole", {
     assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
@@ -95,7 +92,7 @@ new aws.iam.RolePolicy("LambdaPolicy", {
 export const executorLambda = new sst.aws.Function("executor", {
     handler: "./packages/functions/src/agents.executors.agentExecutor", 
     role: lambdaRole.arn,
-    link: [bucket, usersTable],
+    link: [], // Add Additional Resources here like tables, buckets etc.
     timeout: '300 seconds'
 });
 

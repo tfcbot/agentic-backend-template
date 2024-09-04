@@ -12,7 +12,7 @@ import {
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
-import { ContentGenerationCommand } from "@agent-plane/content-agent/metadata/agent";
+import { ContentGenerationCommand } from "src/agent-plane/content-agent-runtime/metadata/agent";
 
 //@ts-ignore
 import { Resource } from "sst";
@@ -36,7 +36,7 @@ export const generateContent = async (command: ContentGenerationCommand ): Promi
     ];
    
     const input: ConverseCommandInput = {
-        modelId: "anthropic.claude-3-sonnet-20240229-v1:0",
+        modelId: "anthropic.claude-3-5-sonnet-20240620-v1:0",
         messages: conversation
     };
     
@@ -46,7 +46,7 @@ export const generateContent = async (command: ContentGenerationCommand ): Promi
         console.log("Recieved Response From Converse API:", response)
         if (response.output?.message?.content?.[0]?.text) {
             const data = response.output.message.content[0].text
-            return response.output.message.content[0].text;
+            return data
         } else {
             throw new Error('No valid response from the model');
         }

@@ -1,7 +1,7 @@
 import { DynamoDBClient, PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
-import { Content } from '@agent-plane/content-agent/metadata/agent';
+import { Content } from 'src/agent-plane/content-agent-runtime/metadata/agent';
 // @ts-ignore
 import { Resource } from 'sst';
 import { PutCommand } from '@aws-sdk/lib-dynamodb';

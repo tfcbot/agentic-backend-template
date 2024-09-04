@@ -1,4 +1,4 @@
-import { executorLambda } from "./executors";
+import { executorLambda } from "./content-agent-executor";
 
 const bedrockAgentRole = new aws.iam.Role("BedrockAgentRole", {
     assumeRolePolicy: JSON.stringify({
@@ -32,8 +32,8 @@ new aws.iam.RolePolicy("BedrockAgentPolicy", {
                     "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-instant-v1",
                     "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-v2:1",
                     "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0", 
-                   // "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0", 
-                   // "arn:aws:bedrock:us-west-2::foundation-model/meta.llama3-1-405b-instruct-v1:0"
+                    "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0", 
+                    "arn:aws:bedrock:us-west-2::foundation-model/meta.llama3-1-405b-instruct-v1:0"
                 ]
             },
             {

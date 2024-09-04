@@ -1,6 +1,6 @@
-import { ContentGenerationCommand, ContentRequest, Content } from "@agent-plane/content-agent/metadata/agent"
-import { saveContent } from "@agent-plane/content-agent/adapters/secondary/database.adapter"
-import { generateContent } from "@agent-plane/content-agent/adapters/secondary/agent.adapter"
+import { ContentGenerationCommand, ContentRequest, Content } from "src/agent-plane/content-agent-runtime/metadata/agent"
+import { saveContent } from "src/agent-plane/content-agent-runtime/adapters/secondary/database.adapter"
+import { generateContent } from "src/agent-plane/content-agent-runtime/adapters/secondary/agent.adapter"
 import { randomUUID } from "crypto";
 
 export const agentGenerateUseCase = async (input: ContentRequest ): Promise<Content> => {
