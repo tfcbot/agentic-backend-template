@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@services/*": ["../../packages/core/src/services/*"], 
+        "@control-plane/*": ["../../packages/core/src/control-plane/*"], 
+        "@agent-plane/*": ["../../packages/core/src/agent-plane/*"],
+        "@orchestrator/*": ["../../packages/core/src/orchestrator/*"],
+        "@utils/*": ["../../packages/utils/*"],
+      },
+      "esModuleInterop": true
+    }, 
+  
+  }

@@ -1,0 +1,52 @@
+export const userCreatedEvent = {
+    type: 'user.created',
+    object: 'event',
+    data: {
+      backup_code_enabled: false,
+      banned: false,
+      create_organization_enabled: true,
+      created_at: 1234567890,
+      delete_self_enabled: true,
+      email_addresses: [{
+        email_address: 'test@example.com',
+        id: 'email_id_123',
+        linked_to: [],
+        object: 'email_address',
+        verification: {
+          status: 'verified',
+          strategy: 'email_link'
+        }
+      }],
+      external_accounts: [],
+      external_id: null,
+      first_name: 'John',
+      has_image: false,
+      id: 'mockUserId123',
+      image_url: 'https://example.com/default-image.jpg',
+      last_active_at: 1234567890,
+      last_name: 'Doe',
+      last_sign_in_at: null,
+      locked: false,
+      lockout_expires_in_seconds: null,
+      mfa_disabled_at: null,
+      mfa_enabled_at: null,
+      object: 'user',
+      passkeys: [],
+      password_enabled: true,
+      phone_numbers: [],
+      primary_email_address_id: 'email_id_123',
+      primary_phone_number_id: null,
+      primary_web3_wallet_id: null,
+      private_metadata: {},
+      profile_image_url: 'https://example.com/default-image.jpg',
+      public_metadata: {},
+      saml_accounts: [],
+      totp_enabled: false,
+      two_factor_enabled: false,
+      unsafe_metadata: {},
+      updated_at: 1234567890,
+      username: null,
+      verification_attempts_remaining: 3,
+      web3_wallets: []
+    }
+  }

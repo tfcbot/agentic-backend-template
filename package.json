@@ -1,0 +1,24 @@
+{
+    "name": "app",
+    "version": "0.0.0",
+    "private": "true",
+    "workspaces": [
+      "packages/**/*"
+    ],
+    "scripts": {
+    "sst": "sst",
+    "dev": "sst dev",
+    "deploy": "sst deploy", 
+    "remove": "sst remove",
+    "secret": "sst secret load"
+    },
+    "devDependencies": {
+      "@tsconfig/node20": "^20.1.4",
+      "typescript": "^5.4.5"
+    },
+    "dependencies": {
+      "sst": "^3"
+    },
+    "license": "MIT"
+  }
+  

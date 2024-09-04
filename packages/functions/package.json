@@ -1,0 +1,11 @@
+{
+    "name": "@agent-backend-template/functions",
+    "version": "0.0.0",
+    "dependencies": {
+      "@agent-backend-template/core": "*"
+    },
+    "devDependencies": {
+      "@types/aws-lambda": "^8.10.137"
+    }
+  }
+  
