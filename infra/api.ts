@@ -67,7 +67,7 @@ api.route("POST /checkout", {
 
 api.route("POST /checkout-webhook", {
   link: [usersTable, stripeSecretKey], 
-  handler: "./packages/functions/src/control-plane.api.billingWebhook", 
+  handler: "./packages/functions/src/control-plane.api.checkoutSessionWebhook", 
   environment: {
     STRIPE_WEBHOOK_SECRET: stripeWebhookSecret.value,
   }, 

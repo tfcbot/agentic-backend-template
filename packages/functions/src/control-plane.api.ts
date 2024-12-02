@@ -1,15 +1,8 @@
-import { createHandler, createSQSHandler } from "../../utils/src/tools/custom-handler";
-import { billingWebhookAdapter } from "@control-plane/billing/adapters/primary/billing-webhook.adapter";
+import { createHandler } from "@utils/src/tools/custom-handler";
 import { checkoutAdapter } from "@control-plane/billing/adapters/primary/checkout.adapter";
-import { createUserAdapter } from "@control-plane/user/adapters/primary/create-user.adapter";
-import { getUserDataAdapter } from "@control-plane/user/adapters/primary/get-user-data.adapter";
-import { updateSettingsPublisherAdapter } from "@control-plane/user/adapters/primary/update-settings-publisher.adapter";
-import { updateSettingsSubscriberAdapter } from "@control-plane/user/adapters/primary/update-settings-subscriber.adapter";
+import { checkoutSessionWebhookAdapter } from "@control-plane/billing/adapters/primary/checkout-session-completed.adapter";
+import { registerUserAdapter } from "@control-plane/user/adapters/primary/register-user.adapter";
 
-
-export const billingWebhook = createHandler(billingWebhookAdapter);
 export const checkout = createHandler(checkoutAdapter);
-export const handleUserSignup = createHandler(createUserAdapter);
-export const getUser = createHandler(getUserDataAdapter);
-export const updateSettingsPublisher = createHandler(updateSettingsPublisherAdapter);
-export const updateSettingsSubscriber = createSQSHandler(updateSettingsSubscriberAdapter);
+export const checkoutSessionWebhook = createHandler(checkoutSessionWebhookAdapter);
+export const handleUserSignup = createHandler(registerUserAdapter);

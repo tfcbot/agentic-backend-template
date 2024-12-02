@@ -1,7 +1,8 @@
 // Responsible for handling entry point API Gateway events and sending them to the appropriate queue
 import { createHandler } from "../../utils/src/tools/custom-handler";
-import { aiGeneratorAdapter } from "@orchestrator/adapters/primary/content-generator-service.adapter";
 import { getUserContentAdapter } from "@orchestrator/adapters/primary/user.adapter";
+import { contentGeneratorAdapter } from "@orchestrator/adapters/primary/content-generator.adapter";
 
-export const handleContentGenerationRequest = createHandler(aiGeneratorAdapter);
+
 export const handleGetUserContentRequest = createHandler(getUserContentAdapter);
+export const handleGenerateContentRequest = createHandler(contentGeneratorAdapter);

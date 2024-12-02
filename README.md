@@ -62,6 +62,35 @@ Deploy to your desired stage
 yarn deploy --stage your-stage-name
 ```
 
+## Endpoints 
+The API exposes the following endpoints:
+
+### Authentication & Billing
+
+#### POST /checkout
+Initiates a Stripe checkout session for user subscription.
+
+#### POST /checkout-webhook 
+Handles Stripe webhook events for billing-related notifications.
+
+#### POST /signup-webhook
+Handles user signup events from Clerk authentication service.
+
+### Content Management
+
+#### GET /content
+Retrieves user content.
+
+#### POST /content/generate
+Generates new content for the user.
+
+All endpoints are protected and require authentication. The API is accessible at:
+- Production: `api.${DOMAIN_NAME}/v1`
+- Other stages: `${stage}-api.${DOMAIN_NAME}/v1`
+
+CORS is enabled for
+
+
 ## Note
 This is a reference implementation meant for starting a new api project. As of now there are no plans to add addtional features or integrations.
 
