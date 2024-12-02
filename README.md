@@ -81,10 +81,10 @@ Handles user signup events from Clerk authentication service.
 #### GET /content
 Retrieves user content.
 
-#### POST /content/generate
+#### POST /generate-content
 Generates new content for the user.
 
-All endpoints are protected and require authentication. The API is accessible at:
+All endpoints are protected and require authentication via Oauth Access token from Clerk. The API is accessible at:
 - Production: `api.${DOMAIN_NAME}/v1`
 - Other stages: `${stage}-api.${DOMAIN_NAME}/v1`
 

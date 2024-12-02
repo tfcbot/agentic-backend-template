@@ -87,7 +87,7 @@ api.route("GET /content", {
 
 
 
-api.route("POST /content/generate", {
+api.route("POST /generate-content", {
   link: [...apiResources],
-  handler: "./packages/functions/src/orchestrator.api.handleConentGenerationRequest",
+  handler: "./packages/functions/src/orchestrator.api.handleGenerateContentRequest",
 });
