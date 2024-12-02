@@ -41,7 +41,6 @@ export class SaaSIdentityVendingMachine implements ISaasIdentityVendingMachine {
             const parsedJwt = DecodedJwtSchema.parse(decodedJwt)
             const userDetails: ValidUser = {
                 userId: parsedJwt.sub,
-                keyId: parsedJwt.metadata?.keyId,
             }
             const isValidUserDetailsAuthHeader = ValidUserSchema.safeParse(userDetails);
             if (isValidUserDetailsAuthHeader.success) {

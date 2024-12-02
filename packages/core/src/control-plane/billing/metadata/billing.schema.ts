@@ -5,7 +5,6 @@ export {
     TransactionType,
     PaymentStatus,
     Messages,
-    OnboardingStatus,
     
     // Interfaces
     PurchasePlan,
@@ -15,16 +14,16 @@ export {
     CheckoutInfoSchema,
     TransactionDtoSchema,
     paymentIntentSchema,
-    checkoutIntentSchema,
+    CheckoutSessionInputSchema,
     checkoutSessionCompletedSchema,
-    
+
     // Types
     User,
     CheckoutInfo,
     TransactionDto,
     PaymentIntentSchema,
-    CheckoutIntent,
     CheckoutSessionCompleted,
+    CheckoutSessionInput,
 };
 
 
@@ -37,8 +36,8 @@ enum TransactionType {
 enum PaymentStatus {
     Valid = 'Valid',
     Invalid = 'Invalid',
-    paid = 'PAID', 
-    notPaid = 'NOT_PAID'
+    Complete = 'Complete', 
+    NotPaid = 'NotPaid'
 }
 
 enum Messages {
@@ -46,11 +45,6 @@ enum Messages {
     Failure = 'failure'
 }
 
-enum OnboardingStatus {
-    notStarted = 'NOT_STARTED', 
-    inProgress = 'IN_PROGRESS', 
-    complete ='COMPLETE'
-}
 
 // Interfaces
 interface PurchasePlan {
@@ -61,13 +55,14 @@ interface PurchasePlan {
 const UserSchema = z.object({
     userId: z.string(),
     paymentStatus: z.nativeEnum(PaymentStatus),
-    onboardingStatus: z.nativeEnum(OnboardingStatus)
+
 });
 
 const CheckoutInfoSchema = z.object({
     userId: z.string(),
     priceId: z.string(),
-    quantity: z.number()
+    quantity: z.number(),
+    creditsPurchased: z.number()
 });
 
 const TransactionDtoSchema = z.object({
@@ -135,63 +130,24 @@ const paymentIntentSchema = z.object({
   transfer_group: z.null().nullable().optional()
 });
 
-const checkoutIntentSchema = z.object({
+const CheckoutSessionInputSchema = z.object({
   userId: z.string(),
+  quantity: z.number(),
 });
 
 const checkoutSessionCompletedSchema = z.object({
   id: z.string(),
-  object: z.literal('checkout.session'),
-  amount_subtotal: z.number(),
-  amount_total: z.number(),
-  automatic_tax: z.object({
-    enabled: z.boolean(),
-    liability: z.null().nullable(),
-    status: z.null().nullable(),
-  }),
-  created: z.number(),
-  currency: z.string(),
-  customer: z.string(),
-  customer_details: z.object({
-    address: z.object({
-      city: z.string().nullable(),
-      country: z.string(),
-      line1: z.string().nullable(),
-      line2: z.string().nullable(),
-      postal_code: z.string(),
-      state: z.string().nullable(),
-    }),
-    email: z.string(),
-    name: z.string(),
-    phone: z.string().nullable(),
-    tax_exempt: z.string(),
-    tax_ids: z.array(z.unknown()),
-  }),
-  expires_at: z.number(),
-  invoice: z.string(),
-  livemode: z.boolean(),
   metadata: z.object({
     userId: z.string(),
   }),
-  mode: z.string(),
-  payment_intent: z.string().nullable(),
-  payment_status: z.string(),
-  status: z.string(),
-  subscription: z.string(),
-  total_details: z.object({
-    amount_discount: z.number(),
-    amount_shipping: z.number(),
-    amount_tax: z.number(),
-  }),
 });
+
+
 
 // Types
 type User = z.infer<typeof UserSchema>;
 type CheckoutInfo = z.infer<typeof CheckoutInfoSchema>;
 type TransactionDto = z.infer<typeof TransactionDtoSchema>;
 type PaymentIntentSchema = z.infer<typeof paymentIntentSchema>;
-type CheckoutIntent = z.infer<typeof checkoutIntentSchema>;
 type CheckoutSessionCompleted = z.infer<typeof checkoutSessionCompletedSchema>;
-
-
-
+type CheckoutSessionInput = z.infer<typeof CheckoutSessionInputSchema>;

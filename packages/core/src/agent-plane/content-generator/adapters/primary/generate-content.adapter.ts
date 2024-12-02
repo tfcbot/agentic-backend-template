@@ -1,23 +1,21 @@
 import { SQSEvent, SQSRecord } from 'aws-lambda';
-import { FeedbackTaskInput } from '@agent-plane/feedback-generator/metadata/feedback-generator.schema';
-import { generateFeedbackUseCase } from '@agent-plane/feedback-generator/usecases/generate-feedback.usecase';
+import { ContentTaskInput } from '@agent-plane/content-generator/metadata/content-generator.schema';
+import { generateContentUsecase } from '@agent-plane/content-generator/usecases/generate-content.usecase';
 
-export const feedbackGenerationAdapter = async (event: SQSEvent) => {
-    console.info("--- Feedback Generation Queue Adapter ---");
+export const contentGenerationAdapter = async (event: SQSEvent) => {
+    console.info("--- Content Generation Queue Adapter ---");
     if (!event.Records || event.Records.length === 0) {
         throw new Error("Missing SQS Records");
     }
 
     const results = await Promise.all(event.Records.map(async (record: SQSRecord) => {
         const body = JSON.parse(record.body);
-        const FeedbackTask: FeedbackTaskInput = {
-            experimentId: body.experimentId,
-            experimentImpressionCount: body.experimentImpressionCount,
-            experimentTitle: body.experimentTitle,
+        const ContentTask: ContentTaskInput = {
             userId: body.userId,
+            prompt: body.prompt,
         };
-        console.info("Generating Feedback for Experiment: ", FeedbackTask);
-        return await generateFeedbackUseCase(FeedbackTask);
+        console.info("Generating Content for Experiment: ", ContentTask);
+        return await generateContentUsecase(ContentTask);
     }));
 
     return results;

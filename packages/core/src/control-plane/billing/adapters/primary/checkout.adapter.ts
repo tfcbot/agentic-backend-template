@@ -1,13 +1,22 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'; 
 import { createCheckoutSessionUseCase } from "@control-plane/billing/usecases/checkout.usecase"
-import { checkoutIntentSchema } from "@control-plane/billing/metadata/billing.schema";
-import { authMiddleware } from '../../../../../../utils/src/vendors/jwt-ventdor';
+import { CheckoutSessionInput, CheckoutSessionInputSchema} from "@control-plane/billing/metadata/billing.schema";
+import { SaaSIdentityVendingMachine } from "@utils/tools/saas-identity"
+import { ValidUser } from '@utils/metadata/saas-identity.schema';
+
+
 
 export const checkoutAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   try {
-    const decodedToken = authMiddleware(event);
-    const validBody = checkoutIntentSchema.parse({ userId: decodedToken.sub });
-    const session = await createCheckoutSessionUseCase(validBody.userId);  
+    if (!event.body) {
+      throw new Error("Missing request body");
+    }
+
+    const body = JSON.parse(event.body);
+    const svm = new SaaSIdentityVendingMachine();
+    const validUser: ValidUser = await svm.getValidUser(event);  
+    const params: CheckoutSessionInput = CheckoutSessionInputSchema.parse({ ...body, ...validUser });
+    const session = await createCheckoutSessionUseCase(params);  
 
     return {
       statusCode: 200,
@@ -16,7 +25,7 @@ export const checkoutAdapter = async (event: APIGatewayProxyEventV2): Promise<AP
   } catch (error) {
     console.error("Error processing checkout:", error);
     if (error instanceof Error) {
-      if (error.message === 'Missing CLERK_PEM_PUBLIC_KEY' || error.message === 'No token provided' || error.message === 'Invalid token') {
+      if ( error.message === 'No token provided' || error.message === 'Invalid token') {
         return {
           statusCode: 401,
           body: JSON.stringify({ error: 'Unauthorized' }),

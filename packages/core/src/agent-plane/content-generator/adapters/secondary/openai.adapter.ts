@@ -16,12 +16,12 @@ const openai = new OpenAI({
   apiKey: Resource.OpenAIApiKey.value
 });
 
-export const generateContent = async (prompt: string): Promise<string> => {
+export const generateContent = async (prompt: string): Promise<GenerateContentCommandOutput> => {
   console.info("Executing OpenAI API for Content Generation");
   
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: [
         { role: "system", content: "You are a helpful assistant that generates content. You can use tools to help you generate better content." },
         { role: "user", content: prompt },
@@ -62,13 +62,18 @@ export const generateContent = async (prompt: string): Promise<string> => {
     if (response.choices[0].message.tool_calls) {
       for (const toolCall of response.choices[0].message.tool_calls) {
         if (toolCall.function.name === "save_content") {
-          const args = JSON.parse(toolCall.function.arguments);
-          await contentRepository.saveContent(args.content);
+          try {
+            const args = JSON.parse(toolCall.function.arguments);
+            await contentRepository.saveContent(args.content);
+          } catch (error) {
+            console.error('Error processing tool call:', error);
+            throw new Error('Failed to process tool call');
+          }
         }
       }
     }
 
-    return content;
+    return { content: content };
 
   } catch (error) {
     console.error('Error generating content:', error);
