@@ -44,7 +44,7 @@ ClerkWebhookSecret=<Your Clerk Webhook Secret>
 yarn sst secret .env --stage your-stage-name
 ```
 
-### Runing Tests 
+### Running Tests 
 
 Create a `.env.test` file in the root of the project and add the following environment variables:
 Provide a test access token for running the api level tests
