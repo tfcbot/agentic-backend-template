@@ -11,11 +11,6 @@ export enum Queue {
     content = 'content',
 }
 
-export interface Task {
-    taskId: UUID;
-    userId: string;
-    status: Status;
-    queue: Queue;
-    createdAt: string;
-    updatedAt: string;
+export enum Topic {
+    tasks = 'tasks',
 }

@@ -18,7 +18,7 @@ This project is built using [SSTv3](https://sst.dev/), [Pulumi](https://www.pulu
 ### Clone the repository:
    ```
    git clone <repo-url>
-   cd agentic-landing-page
+   cd agentic-api-template
    ```
 
 ### Initialize SST in the project
@@ -35,7 +35,6 @@ StripeWebhookSecret=<Your Stripe Webhook Secret>
 PriceID=<Your Stripe Price ID>
 ClerkPubKey=<Your Clerk Publishable Key>
 ClerkWebhookSecret=<Your Clerk Webhook Secret>
-ClerkPEMKey=<Your Clerk PEM Key>
 ```
 
 
@@ -45,6 +44,14 @@ ClerkPEMKey=<Your Clerk PEM Key>
 yarn sst secret .env --stage your-stage-name
 ```
 
+### Runing Tests 
+
+Create a `.env.test` file in the root of the project and add the following environment variables:
+Provide a test access token for running the api level tests
+
+```
+AccessToken=<Your Access Token>
+```
 
 
 ## Deployment

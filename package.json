@@ -1,5 +1,5 @@
 {
-    "name": "app",
+    "name": "agentic-api-template",
     "version": "0.0.0",
     "private": "true",
     "workspaces": [
@@ -14,9 +14,14 @@
     },
     "devDependencies": {
       "@tsconfig/node20": "^20.1.4",
-      "typescript": "^5.4.5"
+      "typescript": "^5.4.5",
+      "dotenv": "^16.4.5"
     },
     "dependencies": {
+      "@clerk/backend": "^1.13.9",
+      "jsonwebtoken": "^9.0.2",
+      "jwks-rsa": "^3.1.0",
+      "openai": "^4.68.1",
       "sst": "^3"
     },
     "license": "MIT"

@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { updateSettingsUseCase } from '@control-plane/user/usecases/update-settings.usecase';
 import { UserSettingsSchema } from '@control-plane/user/metadata/user.schema';
-import { authMiddleware } from '@utils/jwt';
+import { authMiddleware } from '../../../../../../utils/src/vendors/jwt-ventdor';
 
 
 export const updateSettingsPublisherAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {

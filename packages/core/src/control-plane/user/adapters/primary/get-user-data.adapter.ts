@@ -1,6 +1,6 @@
 import { getUserDataUseCase } from '@control-plane/user/usecases/get-user-data.usecase';
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-import { authMiddleware } from '@utils/jwt';
+import { authMiddleware } from '../../../../../../utils/src/vendors/jwt-ventdor';
 
 export const getUserDataAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   try {

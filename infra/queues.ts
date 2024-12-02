@@ -1,13 +1,11 @@
-import { agentAlias, agentResource } from "./agents"
-import { bucket } from "./bucket"
-import { usersTable } from "./database"
+import { contentTable } from "./database"
 
 
-export const DLQ = new sst.aws.Queue("JobDLQ")
+export const DLQ = new sst.aws.Queue("ContentDLQ")
 
-export const jobQueue = new sst.aws.Queue("JobQueue")
+export const contentQueue = new sst.aws.Queue("ContentQueue")
 
-const subscriberRole = new aws.iam.Role("JobQueueSubscriberRole", {
+const subscriberRole = new aws.iam.Role("ContentQueueSubscriberRole", {
     assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -22,7 +20,7 @@ const subscriberRole = new aws.iam.Role("JobQueueSubscriberRole", {
     }),
 });
 
-new aws.iam.RolePolicy("JobQueueSubscriberPolicy", {
+new aws.iam.RolePolicy("ContentQueueSubscriberPolicy", {
     role: subscriberRole.id,
     policy: JSON.stringify({
         Version: "2012-10-17",
@@ -49,41 +47,19 @@ new aws.iam.RolePolicy("JobQueueSubscriberPolicy", {
 
 
 
-export const ContentQueue = new sst.aws.Queue("ContentQueue")
     
-ContentQueue.subscribe({
+contentQueue.subscribe({
         handler: "./packages/functions/src/services.api.contentGenerationHandler", 
         link: [
-            bucket, 
-            usersTable, 
-            agentResource, 
-            agentAlias,
-            subscriberRole
+           contentTable
         ],
         environment: {
-            CONTENT_AGENT_ID: agentResource.agentId, 
-            CONTENT_AGENT_ALIAS_ID: agentAlias.agentAliasId
         }, 
         permissions: [
             {
-                actions: ["bedrock:*"], 
-                resources: ["*"]
+                actions: ["dynamodb:*"], 
+                resources: [contentTable.arn]
             }
         ]
     }, 
-        {filters : [
-            {
-                body : {
-                    jobId : [{exists : true}]
-                }
-            }
-        ]},
-
 )
-
-export const userQueue = new sst.aws.Queue("UserQueue")
-
-userQueue.subscribe({
-    handler: "./packages/functions/src/control-plane.api.handleSettingsSubscriber",
-    link: [usersTable]
-})

@@ -1,8 +1,8 @@
 {
-    "name": "@agent-backend-template/utils",
+    "name": "@agentic-api-template/utils",
     "version": "0.0.0",
     "dependencies": {
-      "@agent-backend-template/core": "*",
+      "@agentic-api-template/core": "*",
       "sst": "*"
     },
     "scripts": {

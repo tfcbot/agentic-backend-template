@@ -3,17 +3,20 @@
 export default $config({
     app(input) {
       return {
-        name: "agentic-backend-template",
-        removal: input?.stage === "production" ? "retain" : "remove",
+        name: "agentic-api-template",
+        removal: input?.stage === "prod" ? "retain" : "remove",
         
         home: "aws",
         providers: { aws: {
-          profile: input?.stage,
           region: "us-east-1",
         }, "aws-native": {
-          profile: input?.stage,
           region: "us-east-1",
-        }},
+        }, 
+        cloudflare: {
+          version: "5.42.0",
+          apiToken: process.env.CLOUDFLARE_API_TOKEN,
+        }
+      },
       };
     },
     async run() {
@@ -22,5 +25,31 @@ export default $config({
         api: infra.api.url,
       };
     },
+    console: {
+      autodeploy: {    
+        target(event) {      
+          if (event.type === "branch" && event.branch != "main" && event.action === "pushed") {        
+            return {          
+              stage: event.branch,          
+              runner: { 
+                engine: "codebuild", 
+                compute: "large",
+                architecture: "arm64" 
+              }        
+            };      
+          }   
+          if (event.type === "branch" && event.branch === "main" && event.action === "pushed") {
+            return {
+              stage: "prod",
+              runner: {
+                engine: "codebuild",
+                compute: "large",
+                architecture: "arm64"
+              }
+            };
+          }
+        }  
+      }
+    }
   });
   

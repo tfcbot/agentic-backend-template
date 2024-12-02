@@ -1,13 +1,14 @@
-import { GenerateContentInput, ContentGenerationJob } from '@orchestrator/metadata/content-generator-service.schema';
+import { GenerateContentInput, ContentGenerationTask } from '@orchestrator/metadata/content-generator.schema';
 import { Status, Queue } from '@orchestrator/metadata/orchestrator.schema';
 import { publishEvent } from '@orchestrator/adapters/secondary/event-publisher.adapter';
 import { randomUUID } from 'crypto';
-// ... existing imports ...
+import { Message } from '@utils/metadata/message.schema'
 
-export async function generateContentUseCase(jobInput: GenerateContentInput): Promise<void> {
+
+export async function generateContentUseCase(jobInput: GenerateContentInput): Promise<Message> {
   try {
-    const job: ContentGenerationJob = {
-      jobId: randomUUID(),
+    const task: ContentGenerationTask = {
+      taskId: randomUUID(),
       userId: jobInput.userId,
       prompt: jobInput.prompt,
       status: Status.Pending,
@@ -16,8 +17,11 @@ export async function generateContentUseCase(jobInput: GenerateContentInput): Pr
       updatedAt: new Date().toISOString(),
     };
 
-    await publishEvent(job);
-
+    await publishEvent(task);
+    return {
+      message: "Content generation task published",
+      data: task.taskId
+    }
   } catch (error) {
     console.error('Error in generateContentUseCase:', error);
     throw new Error('Failed to publish content generation events');
