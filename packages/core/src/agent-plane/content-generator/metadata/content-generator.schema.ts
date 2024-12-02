@@ -26,6 +26,12 @@ export const GetContentOutputSchema = z.object({
   content: z.array(ContentSchema),
 });
 
+export const ContentTaskInputSchema = z.object({
+  userId: z.string(),
+  prompt: z.string(),
+});
+
 // Export types 
 export type GetContentInput = z.infer<typeof GetContentInputSchema>;
 export type GetContentOutput = z.infer<typeof GetContentOutputSchema>;
+export type ContentTaskInput = z.infer<typeof ContentTaskInputSchema>;
