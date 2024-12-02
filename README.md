@@ -1,4 +1,4 @@
-# agentic-backend-template
+# agentic-api-template
 
 This project is built using [SSTv3](https://sst.dev/), [Pulumi](https://www.pulumi.com/), [Stripe](https://stripe.com/) and [Clerk](https://clerk.com/).
 
