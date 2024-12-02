@@ -6,7 +6,7 @@ export const usersTable = new aws.dynamodb.Table("UsersTable", {
     billingMode: "PAY_PER_REQUEST",
 })
 
-export const generatedContentTable = new aws.dynamodb.Table("GeneratedContentTable", {
+export const contentTable = new aws.dynamodb.Table("ContentTable", {
     attributes: [
         {name: "id", type: "S"}
     ],

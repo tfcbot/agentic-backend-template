@@ -1,80 +1,93 @@
-import { usersTable } from "./database";
-import { agentAlias, agentResource } from "./agents/content-agent/content-agent-build";
+import { 
+  usersTable,
+  contentTable
+ } from "./database";
+import { stripeSecretKey, stripeWebhookSecret, clerkWebhookSecret, priceId, clerkClientPublishableKey, clerkClientSecretKey } from "./secrets";
 
-const stripeSecretKey = new sst.Secret('StripeSecretKey')
-const stripeWebhookSecret = new sst.Secret('StripeWebhookSecret')
-const clerkWebhookSecret = new sst.Secret('ClerkWebhookSecret')
-const priceId = new sst.Secret("PriceID")
-const clerkPemKey = new sst.Secret("ClerkPEMKey")
 
-// const allowedOrigin = $app.stage === "main" 
-//   ? "https://app.example.com"
-//   : `https://${$app.stage}-dash.example.com`;
+const DOMAIN_NAME = process.env.DOMAIN_NAME;
+
+export const apiDomainName = $app.stage === "prod" 
+  ? `api.${DOMAIN_NAME}`
+  : `${$app.stage}-api.${DOMAIN_NAME}`;
+
+export const appDomainName = $app.stage === "prod" 
+  ? `app.${DOMAIN_NAME}`
+  : `${$app.stage}-app.${DOMAIN_NAME}`; 
+
 
 export const api = new sst.aws.ApiGatewayV2('BackendApi', {
-//   domain: {
-//     name: `api-${$app.stage}.example.com`
-//   }, 
-}); 
+    domain: {
+      name: apiDomainName,
+      path: "v1",
+      dns: sst.cloudflare.dns({
+        transform: {
+          record: (record) => {
+            if (record.name === apiDomainName) {
+              record.proxied = true;
+              record.ttl = 1;
+            }
+          }
+        }
+      })
+    }, 
+    cors: {
+      allowOrigins: [
+        `https://${appDomainName}`,
+        "http://localhost:3000",
+      ]
+    }
+  }); 
+
+const queues = []
+const topics = []
+const tables = [usersTable]
+const secrets = [stripeSecretKey, stripeWebhookSecret, clerkWebhookSecret, priceId, clerkClientPublishableKey]
+
+const apiResources = [
+  ...queues,
+  ...topics,
+  ...tables,
+  ...secrets,
+]
 
 api.route("POST /checkout", {
   link: [usersTable, stripeSecretKey],
   handler: "./packages/functions/src/control-plane.api.checkout",
   environment: {
     STRIPE_SECRET_KEY: stripeSecretKey.value,
-    REDIRECT_SUCCESS_URL: $app.stage == "main" ? "https://app.example.com": `https://${$app.stage}-dash.example.com`, 
-    REDIRECT_FAILURE_URL: $app.stage == "main" ? "https://app.example.com": `https://${$app.stage}-dash.example.com`, 
+    REDIRECT_SUCCESS_URL: `https://${appDomainName}`,
+    REDIRECT_FAILURE_URL: `https://${appDomainName}`,
     PRICE_ID: priceId.value,
-    CLERK_PEM_PUBLIC_KEY: clerkPemKey.value
+    CLERK_CLIENT_PUBLISHABLE_KEY: clerkClientPublishableKey.value,
+    CLERK_CLIENT_SECRET_KEY: clerkClientSecretKey.value,
+    CLERK_WEBHOOK_SECRET: clerkWebhookSecret.value,
   }, 
 })
 
-api.route("POST /stripe-webhook", {
+api.route("POST /checkout-webhook", {
   link: [usersTable, stripeSecretKey], 
   handler: "./packages/functions/src/control-plane.api.billingWebhook", 
   environment: {
     STRIPE_WEBHOOK_SECRET: stripeWebhookSecret.value,
-    CLERK_PEM_PUBLIC_KEY: clerkPemKey.value 
   }, 
 })
 
-api.route("POST /clerk-signup", {
-  link: [usersTable, clerkWebhookSecret], 
+api.route("POST /signup-webhook", {
+  link: [...apiResources], 
   handler: "./packages/functions/src/control-plane.api.handleUserSignup", 
-  environment: {
-    CLERK_WEBHOOK_SECRET: clerkWebhookSecret.value, 
-    CLERK_PEM_PUBLIC_KEY: clerkPemKey.value
-  }
-})
-
-api.route("POST /settings", {
-  link: [], 
-  handler: "./packages/functions/src/control-plane.api.updateSettingsPublisher",
-  environment: {
-    CLERK_PEM_PUBLIC_KEY: clerkPemKey.value
-  }
 })
 
 
 
 api.route("GET /content", {
-  link: [], 
+  link: [...apiResources], 
   handler: "./packages/functions/src/orchestrator.api.handleGetUserContentRequest",
-  environment: {
-    CLERK_PEM_PUBLIC_KEY: clerkPemKey.value
-  }
 })
 
 
 
-api.route("POST /content", {
-  link: [],
+api.route("POST /content/generate", {
+  link: [...apiResources],
   handler: "./packages/functions/src/orchestrator.api.handleConentGenerationRequest",
-  environment: {
-    CLERK_PEM_PUBLIC_KEY: clerkPemKey.value,
-    AGENT_ID: agentResource.agentId,
-    AGENT_ALIAS_ID: agentAlias.agentAliasId
-  }
 });
-
-// Additional routes can be added here as needed

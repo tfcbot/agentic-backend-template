@@ -2,7 +2,7 @@ import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { GetUserContentInputSchema } from 'src/orchestrator/metadata/content-generator-service.schema'
 import { getUserContentUseCase } from '@orchestrator/usecases/retrieve-user-content.usecase';
 
-import { authMiddleware } from '@utils/jwt';
+import { authMiddleware } from '../../../../../utils/src/vendors/jwt-ventdor';
 
 export const getUserContentAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   

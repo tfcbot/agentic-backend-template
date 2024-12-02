@@ -3,5 +3,11 @@
     "compilerOptions": {
       "module": "NodeNext",
       "moduleResolution": "Bundler",
+      "paths": {
+        "@agent-plane/*": ["../../packages/core/src/features/*"], 
+        "@control-plane/*": ["../../packages/core/src/control-plane/*"], 
+        "@orchestrator/*": ["../../packages/core/src/orchestrator/*"],
+        "@utils/*": ["../../packages/utils/src/*"],
+      },
     },
   }

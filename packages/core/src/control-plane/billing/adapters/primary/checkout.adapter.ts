@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'; 
 import { createCheckoutSessionUseCase } from "@control-plane/billing/usecases/checkout.usecase"
 import { checkoutIntentSchema } from "@control-plane/billing/metadata/billing.schema";
-import { authMiddleware } from '@utils/jwt';
+import { authMiddleware } from '../../../../../../utils/src/vendors/jwt-ventdor';
 
 export const checkoutAdapter = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   try {

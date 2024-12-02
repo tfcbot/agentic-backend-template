@@ -1,5 +1,5 @@
 {
-    "name": "@agent-backend-template/core",
+    "name": "@agentic-api-template/core",
     "version": "0.0.1",
     "exports": {
       "./*": [
