@@ -49,7 +49,7 @@ new aws.iam.RolePolicy("ContentQueueSubscriberPolicy", {
 
     
 contentQueue.subscribe({
-        handler: "./packages/functions/src/services.api.contentGenerationHandler", 
+        handler: "./packages/functions/src/agent-plane.api.contentGenerationHandler", 
         link: [
            contentTable
         ],

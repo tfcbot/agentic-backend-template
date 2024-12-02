@@ -67,7 +67,7 @@ api.route("POST /checkout", {
 
 api.route("POST /checkout-webhook", {
   link: [usersTable, stripeSecretKey], 
-  handler: "./packages/functions/src/control-plane.api.billingWebhook", 
+  handler: "./packages/functions/src/control-plane.api.checkoutSessionWebhook", 
   environment: {
     STRIPE_WEBHOOK_SECRET: stripeWebhookSecret.value,
   }, 
@@ -87,7 +87,7 @@ api.route("GET /content", {
 
 
 
-api.route("POST /content/generate", {
+api.route("POST /generate-content", {
   link: [...apiResources],
-  handler: "./packages/functions/src/orchestrator.api.handleConentGenerationRequest",
+  handler: "./packages/functions/src/orchestrator.api.handleGenerateContentRequest",
 });
