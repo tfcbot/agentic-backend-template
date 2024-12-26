@@ -13,8 +13,6 @@ export class TopicPublisher {
     this.snsClient = new SNSClient({});
     this.topicArns = {
       [Topic.tasks]: Resource.TasksTopic.arn,
-    
-  
     };
   }
 

@@ -1,29 +1,30 @@
 {
-    "name": "agentic-api-template",
-    "version": "0.0.0",
-    "private": "true",
-    "workspaces": [
-      "packages/**/*"
-    ],
-    "scripts": {
+  "name": "agentic-api-template",
+  "version": "0.0.0",
+  "private": "true",
+  "workspaces": [
+    "packages/**/*"
+  ],
+  "scripts": {
     "sst": "sst",
     "dev": "sst dev",
-    "deploy": "sst deploy", 
+    "deploy": "sst deploy",
     "remove": "sst remove",
     "secret": "sst secret load"
-    },
-    "devDependencies": {
-      "@tsconfig/node20": "^20.1.4",
-      "typescript": "^5.4.5",
-      "dotenv": "^16.4.5"
-    },
-    "dependencies": {
-      "@clerk/backend": "^1.13.9",
-      "jsonwebtoken": "^9.0.2",
-      "jwks-rsa": "^3.1.0",
-      "openai": "^4.68.1",
-      "sst": "^3"
-    },
-    "license": "MIT"
-  }
-  
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.716.0",
+    "@clerk/backend": "^1.13.9",
+    "@unkey/api": "^0.29.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "openai": "^4.68.1",
+    "sst": "^3"
+  },
+  "license": "MIT"
+}

@@ -1,6 +1,6 @@
 import { 
   usersTable,
-  contentTable
+  websiteReviewTable
  } from "./database";
 import { stripeSecretKey, stripeWebhookSecret, clerkWebhookSecret, priceId, clerkClientPublishableKey, clerkClientSecretKey } from "./secrets";
 
@@ -41,7 +41,7 @@ export const api = new sst.aws.ApiGatewayV2('BackendApi', {
 
 const queues = []
 const topics = []
-const tables = [usersTable]
+const tables = [usersTable, websiteReviewTable]
 const secrets = [stripeSecretKey, stripeWebhookSecret, clerkWebhookSecret, priceId, clerkClientPublishableKey]
 
 const apiResources = [
@@ -79,15 +79,22 @@ api.route("POST /signup-webhook", {
 })
 
 
+api.route("GET /agents", {
+  link: [...apiResources],
+  handler: "./packages/functions/src/orchestrator.api.handleGetAgents",
+})
 
-api.route("GET /content", {
+api.route("POST /request-website-review", {
+  link: [...apiResources],
+  handler: "./packages/functions/src/orchestrator.api.handleTaskRequest",
+});
+
+
+api.route("GET /website-reviews", {
   link: [...apiResources], 
-  handler: "./packages/functions/src/orchestrator.api.handleGetUserContentRequest",
+  handler: "./packages/functions/src/orchestrator.api.handleGetUserWebsiteReviews",
 })
 
 
 
-api.route("POST /generate-content", {
-  link: [...apiResources],
-  handler: "./packages/functions/src/orchestrator.api.handleGenerateContentRequest",
-});
+

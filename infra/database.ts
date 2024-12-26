@@ -6,10 +6,10 @@ export const usersTable = new aws.dynamodb.Table("UsersTable", {
     billingMode: "PAY_PER_REQUEST",
 })
 
-export const contentTable = new aws.dynamodb.Table("ContentTable", {
+export const websiteReviewTable = new aws.dynamodb.Table("WebsiteReviewTable", {
     attributes: [
-        {name: "contentId", type: "S"}
+        {name: "websiteId", type: "S"}
     ],
-    hashKey: "contentId",
+    hashKey: "websiteId",
     billingMode: "PAY_PER_REQUEST",
 })
