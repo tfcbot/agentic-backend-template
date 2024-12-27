@@ -35,25 +35,13 @@ export const WebsiteReviewSchema = z.object({
     }),
     recommendations: z.array(z.string())
   }),
-  metadata: z.object({
-    url: z.string(),
-    timestamp: z.string(),
-    model: z.string(),
-    tokens: z.object({
-      prompt: z.number(),
-      completion: z.number(),
-      total: z.number()
-    })
-  })
 });
 
 
-export type WebsiteReview = z.infer<typeof WebsiteReviewsSchema>;
+export type WebsiteReview = z.infer<typeof WebsiteReviewSchema>;
 
-export const websiteReviewAgentSystemPrompt = 
-(websiteReviewStrcuturedOutput: WebsiteReview) => `You are a professional website reviewer. 
-   Analyze the provided markdown content and provide a structured JSON analysis including:
-    ${websiteReviewStrcuturedOutput}
+export const websiteReviewAgentSystemPrompt = () => `You are a professional website reviewer. 
+   Analyze the provided markdown content and provide a structured response in JSON format.
     do not include any other text or comments.
     Keep your analysis thorough but concise. Focus on actionable insights.`;
 

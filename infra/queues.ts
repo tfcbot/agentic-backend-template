@@ -1,4 +1,4 @@
-import { contentTable } from "./database"
+import { websiteReviewTable } from "./database"
 
 
 export const DLQ = new sst.aws.Queue("ContentDLQ")
@@ -51,14 +51,14 @@ new aws.iam.RolePolicy("ContentQueueSubscriberPolicy", {
 contentQueue.subscribe({
         handler: "./packages/functions/src/agent-plane.api.contentGenerationHandler", 
         link: [
-           contentTable
+           websiteReviewTable
         ],
         environment: {
         }, 
         permissions: [
             {
                 actions: ["dynamodb:*"], 
-                resources: [contentTable.arn]
+                resources: [websiteReviewTable.arn]
             }
         ]
     }, 
