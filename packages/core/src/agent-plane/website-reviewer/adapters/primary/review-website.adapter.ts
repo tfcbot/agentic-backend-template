@@ -1,5 +1,5 @@
 import { SQSEvent, SQSRecord } from 'aws-lambda';
-import { ReviewWebsiteInput } from '@orchestrator/metadata/agent.schema';
+import { ReviewWebsiteInput } from '@orchestrator/metadata/agent-plane.schema';
 import { reviewWebsiteUsecase } from 'src/agent-plane/website-reviewer/usecases/review-website.usecase';
 
 export const reviewWebsiteAdapter = async (event: SQSEvent) => {

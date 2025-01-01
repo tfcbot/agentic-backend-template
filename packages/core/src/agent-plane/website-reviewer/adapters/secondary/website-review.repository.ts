@@ -1,26 +1,48 @@
-import { DynamoDBDocumentClient, PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, PutCommand, QueryCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { WebsiteReview } from "@orchestrator/metadata/agent-plane.schema";
+// @ts-ignore
+import { Resource } from "sst";
 
-// Initialize DynamoDB client
-const dynamoDbClient = DynamoDBDocumentClient.from(new DynamoDBClient({}));
-const TABLE_NAME = process.env.WEBSITE_REVIEWS_TABLE || "WebsiteReviews";
+export interface IWebsiteReviewRepository {
+  saveReview(review: WebsiteReview): Promise<void>;
+  getReviews(userId: string): Promise<WebsiteReview[]>;
+}
 
-export const websiteReviewRepository = {
-  saveReview: async (review: string): Promise<void> => {
-    const params = {
-      TableName: TABLE_NAME,
-      Item: {
-        id: Date.now().toString(),
-        review,
-        createdAt: new Date().toISOString()
-      }
-    };
+class WebsiteReviewRepository implements IWebsiteReviewRepository {
+  constructor(private dbClient: DynamoDBDocumentClient) {}
 
+  async saveReview(review: WebsiteReview): Promise<void> {
+    console.info("Saving website review to database via WebsiteReviewRepository");
     try {
-      await dynamoDbClient.send(new PutCommand(params));
+      const params = {
+        TableName: Resource.WebsiteReviewTable.tableName,
+        Item: review
+      };
+      await this.dbClient.send(new PutCommand(params));
     } catch (error) {
       console.error("Error saving review:", error);
       throw new Error("Failed to save review");
     }
-  },
-};
+  }
+
+  async getReviews(userId: string): Promise<WebsiteReview[]> {
+    console.info("Getting website reviews from database via WebsiteReviewRepository");
+    try {
+      const params = {
+        TableName: Resource.WebsiteReviewTable.tableName,
+        KeyConditionExpression: "userId = :userId",
+        ExpressionAttributeValues: {
+          ":userId": userId
+        }
+      };
+      const result = await this.dbClient.send(new QueryCommand(params));
+      return result.Items as WebsiteReview[];
+    } catch (error) {
+      console.error("Error getting reviews:", error);
+      throw new Error("Failed to get reviews");
+    }
+  }
+}
+
+export const createWebsiteReviewRepository = (dbClient: DynamoDBDocumentClient): IWebsiteReviewRepository => 
+  new WebsiteReviewRepository(dbClient);

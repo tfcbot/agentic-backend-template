@@ -1,5 +1,5 @@
 // Lambda Handlers attached to the queues as entry points to services
 import { createSQSHandler } from "@utils/src/tools/custom-handler";
-import { contentGenerationAdapter } from "@agent-plane/content-generator/adapters/primary/generate-content.adapter";
+import { reviewWebsiteAdapter } from "@agent-plane/website-reviewer/adapters/primary/review-website.adapter";
 
-export const contentGenerationHandler = createSQSHandler(contentGenerationAdapter);
+export const websiteReviewHandler = createSQSHandler(reviewWebsiteAdapter);

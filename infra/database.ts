@@ -13,3 +13,11 @@ export const websiteReviewTable = new aws.dynamodb.Table("WebsiteReviewTable", {
     hashKey: "websiteId",
     billingMode: "PAY_PER_REQUEST",
 })
+
+export const agentsTable = new aws.dynamodb.Table("AgentsTable", {
+    attributes: [
+        {name: "agentId", type: "S"}
+    ],
+    hashKey: "agentId",
+    billingMode: "PAY_PER_REQUEST",
+})

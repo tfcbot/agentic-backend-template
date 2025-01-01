@@ -2,18 +2,26 @@ import {
   usersTable,
   websiteReviewTable
  } from "./database";
-import { stripeSecretKey, stripeWebhookSecret, clerkWebhookSecret, priceId, clerkClientPublishableKey, clerkClientSecretKey } from "./secrets";
+import { 
+  clerkWebhookSecret,
+  clerkClientPublishableKey,
+  clerkClientSecretKey,
+  priceId,
+  stripeSecretKey,
+  stripeWebhookSecret,
+  secrets
+ } from "./secrets";
+import { tasksTopic } from "./topic";
 
-
-const DOMAIN_NAME = process.env.DOMAIN_NAME;
+const BASE_DOMAIN = process.env.BASE_DOMAIN;
 
 export const apiDomainName = $app.stage === "prod" 
-  ? `api.${DOMAIN_NAME}`
-  : `${$app.stage}-api.${DOMAIN_NAME}`;
+  ? `api.${BASE_DOMAIN}`
+  : `${$app.stage}-api.${BASE_DOMAIN}`;
 
 export const appDomainName = $app.stage === "prod" 
-  ? `app.${DOMAIN_NAME}`
-  : `${$app.stage}-app.${DOMAIN_NAME}`; 
+  ? `app.${BASE_DOMAIN}`
+  : `${$app.stage}-app.${BASE_DOMAIN}`; 
 
 
 export const api = new sst.aws.ApiGatewayV2('BackendApi', {
@@ -40,9 +48,9 @@ export const api = new sst.aws.ApiGatewayV2('BackendApi', {
   }); 
 
 const queues = []
-const topics = []
+const topics = [tasksTopic]
 const tables = [usersTable, websiteReviewTable]
-const secrets = [stripeSecretKey, stripeWebhookSecret, clerkWebhookSecret, priceId, clerkClientPublishableKey]
+
 
 const apiResources = [
   ...queues,
@@ -52,7 +60,7 @@ const apiResources = [
 ]
 
 api.route("POST /checkout", {
-  link: [usersTable, stripeSecretKey],
+  link: [usersTable, ...secrets],
   handler: "./packages/functions/src/control-plane.api.checkout",
   environment: {
     STRIPE_SECRET_KEY: stripeSecretKey.value,
@@ -66,7 +74,7 @@ api.route("POST /checkout", {
 })
 
 api.route("POST /checkout-webhook", {
-  link: [usersTable, stripeSecretKey], 
+  link: [usersTable, ...secrets], 
   handler: "./packages/functions/src/control-plane.api.checkoutSessionWebhook", 
   environment: {
     STRIPE_WEBHOOK_SECRET: stripeWebhookSecret.value,
@@ -86,7 +94,7 @@ api.route("GET /agents", {
 
 api.route("POST /request-website-review", {
   link: [...apiResources],
-  handler: "./packages/functions/src/orchestrator.api.handleTaskRequest",
+  handler: "./packages/functions/src/orchestrator.api.handleRequestWebsiteReview",
 });
 
 

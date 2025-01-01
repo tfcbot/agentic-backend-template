@@ -3,6 +3,14 @@
 import "sst"
 declare module "sst" {
   export interface Resource {
+    "AgentsTable": {
+      "tableName": string
+      "type": "aws.dynamodb/table.Table"
+    }
+    "BackendApi": {
+      "type": "sst.aws.ApiGatewayV2"
+      "url": string
+    }
     "ClerkClientPublishableKey": {
       "type": "sst.sst.Secret"
       "value": string
@@ -15,11 +23,7 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "ContentDLQ": {
-      "type": "sst.aws.Queue"
-      "url": string
-    }
-    "ContentQueue": {
+    "DLQ": {
       "type": "sst.aws.Queue"
       "url": string
     }
@@ -43,9 +47,21 @@ declare module "sst" {
       "arn": string
       "type": "sst.aws.SnsTopic"
     }
+    "UnkeyApiId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "UnkeyRootKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "UsersTable": {
       "tableName": string
       "type": "aws.dynamodb/table.Table"
+    }
+    "WebsiteReviewQueue": {
+      "type": "sst.aws.Queue"
+      "url": string
     }
     "WebsiteReviewTable": {
       "tableName": string

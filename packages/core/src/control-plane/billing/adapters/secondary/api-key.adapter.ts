@@ -3,7 +3,7 @@ import { CreateApiKeyCommandInput, CreateApiKeyCommandOutput, DeleteApiKeyComman
 import { UpdateRemainingCreditsCommand, UpdateRemainingCreditsCommandOutput } from "@utils/metadata/credit.schema";
 import { GetApiKeyCommandOutput } from "@utils/metadata/apikey.schema";
 import { Message } from "@utils/metadata/message.schema";
-import { ApiKey } from "@control-plane/user/metadata/api-key.schema";
+import { ApiKey } from "@control-plane/billing/metadata/api-key.schema";
 
 export interface IApiKeyAdapter {
     createApiKey(params: CreateApiKeyCommandInput): Promise<CreateApiKeyCommandOutput>;

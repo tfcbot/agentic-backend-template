@@ -1,9 +1,9 @@
-import { GetWebsiteReviewsInput, GetWebsiteReviewsOutput } from '@orchestrator/metadata/agent.schema';
-import { getWebsiteReviewsUseCase } from 'src/agent-plane/website-reviewer/usecases/get-website-reviews.usecase';
+import { GetWebsiteReviewsInput, GetWebsiteReviewsOutput } from '@agent-plane/website-reviewer/metadata/website-reviewer.schema';
+import { getWebsiteReviewsUseCase } from '@agent-plane/website-reviewer/usecases/get-website-reviews.usecase';
 
 
 export class GetWebsiteReviewsAdapter {
-  async execute(input: GetWebsiteReviewsInput): Promise<GetWebsiteReviewsOutput[]> {
+  async execute(input: GetWebsiteReviewsInput): Promise<GetWebsiteReviewsOutput> {
     try {
       const result = await getWebsiteReviewsUseCase(input);
       return result;

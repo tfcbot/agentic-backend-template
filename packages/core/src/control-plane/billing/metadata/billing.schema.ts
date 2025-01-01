@@ -16,6 +16,8 @@ export {
     paymentIntentSchema,
     CheckoutSessionInputSchema,
     checkoutSessionCompletedSchema,
+    GetRemainingCreditsInputSchema,
+    GetRemainingCreditsOutputSchema,
 
     // Types
     User,
@@ -24,6 +26,8 @@ export {
     PaymentIntentSchema,
     CheckoutSessionCompleted,
     CheckoutSessionInput,
+    GetRemainingCreditsInput,
+    GetRemainingCreditsOutput,
 };
 
 
@@ -143,6 +147,15 @@ const checkoutSessionCompletedSchema = z.object({
 });
 
 
+const GetRemainingCreditsInputSchema = z.object({
+  userId: z.string(),
+});
+
+const GetRemainingCreditsOutputSchema = z.object({
+  remainingCredits: z.number(),
+});
+
+
 
 // Types
 type User = z.infer<typeof UserSchema>;
@@ -151,3 +164,5 @@ type TransactionDto = z.infer<typeof TransactionDtoSchema>;
 type PaymentIntentSchema = z.infer<typeof paymentIntentSchema>;
 type CheckoutSessionCompleted = z.infer<typeof checkoutSessionCompletedSchema>;
 type CheckoutSessionInput = z.infer<typeof CheckoutSessionInputSchema>;
+type GetRemainingCreditsInput = z.infer<typeof GetRemainingCreditsInputSchema>;
+type GetRemainingCreditsOutput = z.infer<typeof GetRemainingCreditsOutputSchema>;

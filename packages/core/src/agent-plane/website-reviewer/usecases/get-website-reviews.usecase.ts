@@ -1,12 +1,13 @@
-import { GetWebsiteReviewsInput, GetWebsiteReviewsOutput } from '@orchestrator/metadata/agent.schema';
+import { GetWebsiteReviewsInput, GetWebsiteReviewsOutput } from '@agent-plane/website-reviewer/metadata/website-reviewer.schema';
+import { websiteReviewRepository } from '../adapters/secondary/datastore.adapter';
 
-export const getWebsiteReviewsUseCase = async (input: GetWebsiteReviewsInput): Promise<GetWebsiteReviewsOutput[]> => {
+
+export const getWebsiteReviewsUseCase = async (input: GetWebsiteReviewsInput): Promise<GetWebsiteReviewsOutput> => {
   console.info("Getting website reviews for User: ", input.userId);
 
   try {
-    // This usecase should be implemented by injecting a repository/adapter
-    // to handle data access, rather than directly accessing DynamoDB
-    throw new Error('Repository not implemented');
+    const reviews = await websiteReviewRepository.getReviews(input.userId);
+    return { reviews: reviews }
   } catch (error) {
     console.error('Error retrieving website reviews:', error);
     throw new Error('Failed to retrieve website reviews');

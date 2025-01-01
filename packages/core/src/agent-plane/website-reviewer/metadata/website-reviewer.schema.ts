@@ -2,6 +2,9 @@ import { z } from "zod";
 
 
 export const WebsiteReviewSchema = z.object({
+  userId: z.string(),
+  websiteUrl: z.string(),
+  createdAt: z.string(),
   copywriting_analysis: z.object({
     headline_effectiveness: z.object({
       clarity: z.string(),
@@ -37,6 +40,22 @@ export const WebsiteReviewSchema = z.object({
   }),
 });
 
+export const GetWebsiteReviewsInputSchema = z.object({
+  userId: z.string()
+});
+
+export const GetWebsiteReviewsOutputSchema = z.object({
+  reviews: z.array(WebsiteReviewSchema)
+});
+
+export const ReviewWebsiteInputSchema = z.object({
+  userId: z.string(),
+  websiteUrl: z.string()
+});
+
+export const ReviewWebsiteOutputSchema = z.object({
+  review: WebsiteReviewSchema
+});
 
 export type WebsiteReview = z.infer<typeof WebsiteReviewSchema>;
 
@@ -48,3 +67,8 @@ export const websiteReviewAgentSystemPrompt = () => `You are a professional webs
 export const websiteReviewPrompt = (url: string) => {
     return `Please review the website at ${url} and provide a detailed analysis.`;
 }
+
+export type GetWebsiteReviewsInput = z.infer<typeof GetWebsiteReviewsInputSchema>;
+export type GetWebsiteReviewsOutput = z.infer<typeof GetWebsiteReviewsOutputSchema>;
+export type ReviewWebsiteInput = z.infer<typeof ReviewWebsiteInputSchema>;
+export type ReviewWebsiteOutput = z.infer<typeof ReviewWebsiteOutputSchema>;

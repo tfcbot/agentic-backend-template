@@ -8,6 +8,7 @@ export enum Status {
 
 export enum Queue {
     content = 'content',
+    websiteReview = 'websiteReview',
 }
 
 export enum Topic {
@@ -25,40 +26,15 @@ export const TaskSchema = z.object({
 })
 
 
-
-export const ContentSchema = z.object({
-  userId: z.string(),
-  contentId: z.string().uuid(),
-  text: z.string(),
-})
-
-export const GetUserContentInputSchema = z.object({
-  userId: z.string(),
-})
-
-export const GetUserContentOutputSchema = z.object({
-  content: z.array(ContentSchema)
-});
-
-
-export const GenerateContentInputSchema = z.object({
-  userId: z.string(),
-  prompt: z.string(),
-});
-
-export const ContentGenerationTaskSchema = TaskSchema.extend({
+export const WebsiteReviewTaskSchema = TaskSchema.extend({
   payload: z.object({
-    prompt: z.string(),
+    websiteUrl: z.string(),
   }),
 });
 
 
-
-export type ContentGenerationTask = z.infer<typeof ContentGenerationTaskSchema>
-export type GenerateContentInput = z.infer<typeof GenerateContentInputSchema>;
-export type GetUserContentInput = z.infer<typeof GetUserContentInputSchema>; 
-export type GetUserContentOutput = z.infer<typeof GetUserContentOutputSchema>; 
+export type WebsiteReviewTask = z.infer<typeof WebsiteReviewTaskSchema>
 export type Task = z.infer<typeof TaskSchema>
 
 export type taskType =
-  | ContentGenerationTask;
+  | WebsiteReviewTask;

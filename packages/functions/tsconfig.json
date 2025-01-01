@@ -6,7 +6,7 @@
         "@control-plane/*": ["../../packages/core/src/control-plane/*"], 
         "@agent-plane/*": ["../../packages/core/src/agent-plane/*"],
         "@orchestrator/*": ["../../packages/core/src/orchestrator/*"],
-        "@utils/*": ["../../packages/utils/*"],
+        "@utils/*": ["../../packages/utils/src/*"],
       },
       "esModuleInterop": true
     }, 

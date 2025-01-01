@@ -1,5 +1,5 @@
-import { GetAgentsInput, GetAgentsOutput } from '@orchestrator/metadata/agent.schema';
-import { getAgentsUseCase } from '@agent-plane/usecases/get-agents.usecase';
+import { GetAgentsInput, GetAgentsOutput } from '@agent-plane/agent-manager/metadata/agents.schema';
+import { getAgentsUseCase } from '@agent-plane/agent-manager/usecases/get-agents.usecase';
 
 export class GetAgentsAdapter {
   async execute(input: GetAgentsInput): Promise<GetAgentsOutput[]> {

@@ -1,11 +1,11 @@
 import { websiteReviewTable } from "./database"
 
 
-export const DLQ = new sst.aws.Queue("ContentDLQ")
+export const DLQ = new sst.aws.Queue("DLQ")
 
-export const contentQueue = new sst.aws.Queue("ContentQueue")
+export const websiteReviewQueue = new sst.aws.Queue("WebsiteReviewQueue")
 
-const subscriberRole = new aws.iam.Role("ContentQueueSubscriberRole", {
+const subscriberRole = new aws.iam.Role("QueueSubscriberRole", {
     assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -20,7 +20,7 @@ const subscriberRole = new aws.iam.Role("ContentQueueSubscriberRole", {
     }),
 });
 
-new aws.iam.RolePolicy("ContentQueueSubscriberPolicy", {
+new aws.iam.RolePolicy("QueueSubscriberPolicy", {
     role: subscriberRole.id,
     policy: JSON.stringify({
         Version: "2012-10-17",
@@ -48,8 +48,8 @@ new aws.iam.RolePolicy("ContentQueueSubscriberPolicy", {
 
 
     
-contentQueue.subscribe({
-        handler: "./packages/functions/src/agent-plane.api.contentGenerationHandler", 
+websiteReviewQueue.subscribe({
+        handler: "./packages/functions/src/agent-plane.api.websiteReviewHandler", 
         link: [
            websiteReviewTable
         ],

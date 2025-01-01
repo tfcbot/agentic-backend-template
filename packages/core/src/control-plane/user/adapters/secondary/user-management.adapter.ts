@@ -22,7 +22,7 @@ export class UserAdapter implements IUserAdapter {
     console.info("Registering user in dynamo");
     try {
       const command = new PutCommand({
-        TableName: Resource.Users.tableName,
+        TableName: Resource.UsersTable.tableName,
         Item: user,
       });
     

@@ -68,5 +68,5 @@ export const reviewWebsite = async (url: string): Promise<WebsiteReview> => {
   }
 };
 
-export const getWebsiteReview = withRetry(reviewWebsite, { retries: 3, delay: 1000, onRetry: (error: Error) => console.warn('Retrying reviewWebsite due to error:', error) });
+export const runWebsiteReview = withRetry(reviewWebsite, { retries: 3, delay: 1000, onRetry: (error: Error) => console.warn('Retrying reviewWebsite due to error:', error) });
 
