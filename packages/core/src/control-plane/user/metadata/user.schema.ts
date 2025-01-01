@@ -12,13 +12,14 @@ export {
     UserSchema,
     UserSettingsSchema,
     UserSettingsJobSchema,
-
+    UpdateUserOnboardingDetailsInputSchema,
     // Types
     UserDetails,
     NewUser,
     User,
     UserSettings,
     UserSettingsJob,
+    UpdateUserOnboardingDetailsInput,
 };
 
 // Enums
@@ -45,6 +46,7 @@ const NewUserSchema = z.object({
 
 const UserSchema = z.object({
     userId: z.string(),
+    onboardingStatus: z.nativeEnum(OnboardingStatus),
 });
 
 const UserSettingsSchema = z.object({
@@ -68,9 +70,18 @@ const UserSettingsJobSchema = z.object({
     updatedAt: z.string()
 });
 
+const UpdateUserOnboardingDetailsInputSchema = z.object({
+    userId: z.string(),
+    currentRole: z.string(),
+    useCase: z.string(),
+    onboardingComplete: z.boolean(),
+});
+
+
 // Types
 type UserDetails = z.infer<typeof UserDetailsSchema>;
 type NewUser = z.infer<typeof NewUserSchema>;
 type User = z.infer<typeof UserSchema>;
 type UserSettings = z.infer<typeof UserSettingsSchema>;
 type UserSettingsJob = z.infer<typeof UserSettingsJobSchema>;
+type UpdateUserOnboardingDetailsInput = z.infer<typeof UpdateUserOnboardingDetailsInputSchema>;

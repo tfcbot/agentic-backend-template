@@ -41,6 +41,7 @@ export class SaaSIdentityVendingMachine implements ISaasIdentityVendingMachine {
             const parsedJwt = DecodedJwtSchema.parse(decodedJwt)
             const userDetails: ValidUser = {
                 userId: parsedJwt.sub,
+                keyId: parsedJwt.metadata?.keyId,
             }
             const isValidUserDetailsAuthHeader = ValidUserSchema.safeParse(userDetails);
             if (isValidUserDetailsAuthHeader.success) {
@@ -56,9 +57,8 @@ export class SaaSIdentityVendingMachine implements ISaasIdentityVendingMachine {
 
     async getValidUser(event: APIGatewayProxyEventV2): Promise<ValidUser> {
         try {
-            const userDetailsFromAuthHeader = await this.getValidUserFromAuthHeader(event);          
+            const userDetailsFromAuthHeader = await this.getValidUserFromAuthHeader(event);  
             if (userDetailsFromAuthHeader) {
-                console.info('User found in auth header', userDetailsFromAuthHeader);
                 return userDetailsFromAuthHeader;
             }
             throw new Error('Unable to Validate User. Provide a valid api key or access token');

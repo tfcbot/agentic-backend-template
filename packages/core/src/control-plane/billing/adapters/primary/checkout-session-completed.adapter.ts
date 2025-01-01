@@ -13,7 +13,7 @@ export const checkoutSessionWebhookAdapter = async (event: any) => {
     try {
         stripeEvent = await stripe.webhooks.constructEvent(event.body, signature, process.env.STRIPE_WEBHOOK_SECRET);   
     } catch (err) {
-        console.error(`⚠️  Webhook signature verification failed.`);
+        console.error(`⚠️  Webhook signature verification failed.` , err);
         return { statusCode: 400, body: "Invalid signature" };
     }
     const session = stripeEvent.data.object;

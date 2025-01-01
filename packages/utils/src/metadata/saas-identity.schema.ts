@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const ValidUserSchema = z.object({
   userId: z.string(),
-  keyId: z.string(),
+  keyId: z.string().optional(),
 });
 
 export const MessageSchema = z.object({

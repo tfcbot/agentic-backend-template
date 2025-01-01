@@ -7,6 +7,14 @@ declare module "sst" {
       "tableName": string
       "type": "aws.dynamodb/table.Table"
     }
+    "ApiKeyStreamProcessor": {
+      "name": string
+      "type": "sst.aws.Function"
+    }
+    "ApiKeysTable": {
+      "tableName": string
+      "type": "aws.dynamodb/table.Table"
+    }
     "BackendApi": {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
@@ -23,9 +31,17 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "CreateApiKeyStreamProcessor": {
+      "name": string
+      "type": "sst.aws.Function"
+    }
     "DLQ": {
       "type": "sst.aws.Queue"
       "url": string
+    }
+    "OnboardingStreamProcessor": {
+      "name": string
+      "type": "sst.aws.Function"
     }
     "OpenAIApiKey": {
       "type": "sst.sst.Secret"
